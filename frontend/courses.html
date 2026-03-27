@@ -63,7 +63,7 @@ body::before {
 </div>
 
 <script>
-const API="http://127.0.0.1:5000";
+const API="https://careerpilot-ai-gamma.vercel.app";
 async function getCourses(){
   const role=document.getElementById('course-role').value.trim();
   const gaps=document.getElementById('course-gaps').value.trim().split(',').map(s=>s.trim()).filter(Boolean);

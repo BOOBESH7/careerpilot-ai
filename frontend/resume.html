@@ -102,7 +102,7 @@ body::before {
 </div>
 
 <script>
-const API = "http://127.0.0.1:5000";
+const API = "https://careerpilot-ai-gamma.vercel.app";
 let fileObj = null;
 function handleFile(e){ fileObj=e.target.files[0]; if(!fileObj)return; document.getElementById('file-ph').classList.add('hidden'); document.getElementById('file-sel').classList.remove('hidden'); document.getElementById('file-name').textContent=fileObj.name; }
 async function scoreResume(){
