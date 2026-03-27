@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Sign In — CareerPilot AI</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Inter",sans-serif;}
+body{min-height:100vh;background:#0a0a0f;display:flex;align-items:center;justify-content:center;background-image:url("https://picsum.photos/id/1015/1600/900");background-size:cover;background-position:center;}
+.overlay{position:fixed;inset:0;background:rgba(8,8,20,0.85);z-index:0;}
+.box{position:relative;z-index:1;width:100%;max-width:420px;margin:20px;background:rgba(15,15,30,0.97);border:1px solid rgba(99,102,241,0.3);border-radius:24px;padding:40px 36px;backdrop-filter:blur(20px);box-shadow:0 24px 80px rgba(0,0,0,0.6);}
+.close-btn{position:absolute;top:16px;right:20px;color:#4b5563;font-size:24px;text-decoration:none;line-height:1;font-weight:300;transition:color 0.2s;}
+.close-btn:hover{color:#e2e8f0;}
+.logo{text-align:center;margin-bottom:28px;}
+.logo-icon{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px;}
+.logo h1{color:white;font-size:24px;font-weight:900;}
+.logo p{color:#64748b;font-size:13px;margin-top:4px;}
+.tabs{display:flex;background:rgba(255,255,255,0.05);border-radius:12px;padding:4px;gap:4px;margin-bottom:24px;}
+.tab{flex:1;padding:10px;border-radius:9px;border:none;background:transparent;color:#64748b;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.tab.active{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;}
+.msg{padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:16px;display:none;}
+.msg.err{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#fca5a5;}
+.msg.ok{background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:#6ee7b7;}
+.btn-google{width:100%;padding:13px;border-radius:12px;border:none;background:white;color:#1f2937;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.2s;margin-bottom:16px;}
+.btn-google:hover{background:#f1f5f9;transform:translateY(-1px);}
+.sep{display:flex;align-items:center;gap:10px;color:#374151;font-size:12px;margin-bottom:16px;}
+.sep::before,.sep::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.08);}
+.inp{width:100%;background:rgba(255,255,255,0.05);border:2px solid rgba(99,102,241,0.2);border-radius:12px;padding:13px 16px;color:#e2e8f0;font-size:14px;outline:none;transition:all 0.2s;margin-bottom:12px;display:block;}
+.inp:focus{border-color:#6366f1;background:rgba(99,102,241,0.08);}
+.inp::placeholder{color:#374151;}
+.btn-main{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px rgba(99,102,241,0.4);margin-bottom:12px;}
+.btn-main:hover{transform:translateY(-1px);}
+.btn-main:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.forgot{text-align:center;}
+.forgot button{background:none;border:none;color:#6366f1;font-size:13px;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="overlay"></div>
+<div class="box">
+  <a href="/" class="close-btn">&#x2715;</a>
+  <div class="logo">
+    <div class="logo-icon">🚀</div>
+    <h1>CareerPilot AI</h1>
+    <p>Sign in to save your progress &amp; access your profile</p>
+  </div>
+  <div class="tabs">
+    <button class="tab active" id="tl" onclick="sw('login')">Sign In</button>
+    <button class="tab" id="ts" onclick="sw('signup')">Sign Up</button>
+  </div>
+  <div id="msg" class="msg"></div>
+  <button class="btn-google" onclick="googleLogin()">
+    <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+    Continue with Google
+  </button>
+  <div class="sep">or continue with email</div>
+  <input id="nm" class="inp" type="text" placeholder="Full Name" style="display:none;"/>
+  <input id="em" class="inp" type="email" placeholder="Email address"/>
+  <input id="pw" class="inp" type="password" placeholder="Password (min 6 chars)" onkeydown="if(event.key==='Enter')doSubmit()"/>
+  <button class="btn-main" id="ab" onclick="doSubmit()">Sign In</button>
+  <div class="forgot" id="fw"><button onclick="doForgot()">Forgot password?</button></div>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import{getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signInWithRedirect,getRedirectResult,GoogleAuthProvider,sendPasswordResetEmail,onAuthStateChanged,updateProfile}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import{getFirestore,doc,setDoc,getDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const cfg={apiKey:"AIzaSyAAQ4YStcuTEp4E4qQoA3Sfms4UGyJyjbY",authDomain:"resume-analyzer-com.firebaseapp.com",projectId:"resume-analyzer-com",storageBucket:"resume-analyzer-com.firebasestorage.app",messagingSenderId:"1065048610992",appId:"1:1065048610992:web:3de45568615994b048c375"};
+const app=initializeApp(cfg),auth=getAuth(app),db=getFirestore(app),gp=new GoogleAuthProvider();
+
+let redirectDone=false;
+
+getRedirectResult(auth).then(async r=>{
+  redirectDone=true;
+  if(r?.user){await saveProfile(r.user);window.location.href="/";}
+}).catch(e=>{redirectDone=true;showMsg(fe(e),"err");});
+
+onAuthStateChanged(auth,u=>{if(u&&redirectDone)window.location.href="/";});
+
+async function saveProfile(user){
+  try{
+    const ref=doc(db,"users",user.uid);
+    const snap=await getDoc(ref);
+    if(!snap.exists()){
+      await setDoc(ref,{uid:user.uid,name:user.displayName||"",email:user.email,photoURL:user.photoURL||"",createdAt:serverTimestamp(),totalScore:0,roadmapsCompleted:0});
+    }else{
+      await setDoc(ref,{lastLogin:serverTimestamp()},{merge:true});
+    }
+  }catch(e){console.error(e);}
+}
+
+let tab="login";
+window.sw=t=>{tab=t;document.getElementById("tl").classList.toggle("active",t==="login");document.getElementById("ts").classList.toggle("active",t==="signup");document.getElementById("nm").style.display=t==="signup"?"block":"none";document.getElementById("ab").textContent=t==="login"?"Sign In":"Create Account";document.getElementById("fw").style.display=t==="signup"?"none":"block";showMsg("","");};
+function showMsg(t,c){const e=document.getElementById("msg");e.textContent=t;e.className="msg "+(c||"");e.style.display=t?"block":"none";}
+window.googleLogin=()=>{showMsg("Redirecting to Google...","ok");signInWithRedirect(auth,gp);};
+window.doSubmit=async()=>{
+  const email=document.getElementById("em").value.trim();
+  const pass=document.getElementById("pw").value;
+  const name=document.getElementById("nm").value.trim();
+  const btn=document.getElementById("ab");
+  if(!email||!pass)return showMsg("Please fill in all fields.","err");
+  btn.textContent="Please wait...";btn.disabled=true;
+  try{
+    if(tab==="login"){
+      const c=await signInWithEmailAndPassword(auth,email,pass);
+      await saveProfile(c.user);window.location.href="/";
+    }else{
+      if(!name)return showMsg("Please enter your name.","err");
+      const c=await createUserWithEmailAndPassword(auth,email,pass);
+      await updateProfile(c.user,{displayName:name});
+      await saveProfile(c.user);
+      showMsg("Account created! Welcome "+name+"!","ok");
+      setTimeout(()=>window.location.href="/",1200);
+    }
+  }catch(err){showMsg(fe(err),"err");}
+  finally{btn.textContent=tab==="login"?"Sign In":"Create Account";btn.disabled=false;}
+};
+window.doForgot=async()=>{
+  const email=document.getElementById("em").value.trim();
+  if(!email)return showMsg("Enter your email first.","err");
+  try{await sendPasswordResetEmail(auth,email);showMsg("Reset email sent!","ok");}
+  catch(err){showMsg(fe(err),"err");}
+};
+function fe(e){return{"auth/wrong-password":"Incorrect password.","auth/user-not-found":"No account found. Sign up first.","auth/email-already-in-use":"Email already registered. Sign in instead.","auth/weak-password":"Password must be 6+ characters.","auth/invalid-email":"Invalid email address.","auth/too-many-requests":"Too many attempts. Try again later.","auth/unauthorized-domain":"Add 127.0.0.1 to Firebase Console > Auth > Settings > Authorized domains."}[e.code]||e.message.replace("Firebase: ","");}
+</script>
+</body>
+</html>

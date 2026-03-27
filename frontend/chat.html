@@ -1,0 +1,604 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CareerPilot AI â€” Chat</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{font-family:'Inter',sans-serif;box-sizing:border-box;}
+html,body{height:100%;margin:0;}
+body{background:#0d0d14;color:#e2e8f0;display:flex;flex-direction:column;}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:#2d2d4e;border-radius:4px;}
+
+/* Sidebar */
+#sidebar{width:240px;background:#0a0a12;border-right:1px solid rgba(255,255,255,0.06);
+  display:flex;flex-direction:column;flex-shrink:0;transition:width 0.3s;}
+#sidebar.collapsed{width:0;overflow:hidden;}
+
+/* Messages */
+.msg-user{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;border-radius:18px 18px 4px 18px;padding:12px 16px;max-width:68%;
+  font-size:14px;line-height:1.7;word-break:break-word;}
+.msg-ai{background:#1a1a2e;border:1px solid rgba(99,102,241,0.15);color:#e2e8f0;border-radius:18px 18px 18px 4px;padding:12px 16px;max-width:76%;
+  font-size:14px;line-height:1.8;word-break:break-word;}
+
+/* Typing dots */
+.typing-dot{width:8px;height:8px;border-radius:50%;background:#6366f1;
+  animation:typingBounce 1.2s ease-in-out infinite;}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes typingBounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-8px);}}
+
+/* Input */
+.chat-input{background:#1a1a2e;border:2px solid rgba(99,102,241,0.2);border-radius:16px;
+  color:#e2e8f0;font-size:15px;outline:none;resize:none;
+  transition:border-color 0.2s,box-shadow 0.2s;line-height:1.6;max-height:160px;overflow-y:auto;}
+.chat-input:focus{border-color:#6366f1;box-shadow:0 0 0 4px rgba(99,102,241,0.1);}
+.chat-input::placeholder{color:#4b5563;}
+
+/* Send button */
+.send-btn{background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:12px;
+  width:44px;height:44px;cursor:pointer;transition:all 0.2s;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(99,102,241,0.4);}
+.send-btn:hover{transform:scale(1.05);box-shadow:0 6px 20px rgba(99,102,241,0.5);}
+.send-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+
+/* Mic button */
+.mic-btn{background:#1a1a2e;border:2px solid rgba(99,102,241,0.2);border-radius:12px;
+  width:44px;height:44px;cursor:pointer;transition:all 0.2s;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;color:#6366f1;}
+.mic-btn:hover{border-color:#6366f1;background:rgba(99,102,241,0.1);}
+.mic-btn.recording{background:rgba(239,68,68,0.15);border-color:#ef4444;color:#ef4444;
+  animation:micPulse 1s ease-in-out infinite;}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.4);}50%{box-shadow:0 0 0 8px rgba(239,68,68,0);}}
+
+/* TTS button */
+.tts-btn{background:transparent;border:none;cursor:pointer;padding:4px 6px;border-radius:6px;
+  color:#4b5563;transition:all 0.2s;font-size:14px;}
+.tts-btn:hover{color:#a5b4fc;background:rgba(99,102,241,0.1);}
+.tts-btn.speaking{color:#6366f1;animation:ttsPulse 1s ease-in-out infinite;}
+@keyframes ttsPulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+/* Voice indicator */
+.voice-indicator{display:none;align-items:center;gap:6px;padding:8px 14px;
+  background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);
+  border-radius:12px;font-size:12px;color:#fca5a5;}
+.voice-indicator.active{display:flex;}
+.voice-bar{width:3px;border-radius:2px;background:#ef4444;animation:voiceBar 0.6s ease-in-out infinite alternate;}
+.voice-bar:nth-child(2){animation-delay:0.1s;height:12px;}
+.voice-bar:nth-child(3){animation-delay:0.2s;height:18px;}
+.voice-bar:nth-child(4){animation-delay:0.3s;height:10px;}
+.voice-bar:nth-child(5){animation-delay:0.4s;height:16px;}
+@keyframes voiceBar{from{height:4px;}to{height:20px;}}
+
+/* Sidebar item */
+.hist-item{padding:10px 14px;border-radius:10px;cursor:pointer;font-size:13px;
+  color:#9ca3af;transition:all 0.15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hist-item:hover{background:rgba(99,102,241,0.1);color:#e2e8f0;}
+.hist-item.active{background:rgba(99,102,241,0.15);color:#a5b4fc;}
+
+/* Fade in */
+.fade-up{animation:fadeUp 0.35s ease forwards;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* Markdown in AI messages */
+.msg-ai strong{color:#a5b4fc;}
+.msg-ai code{background:#0d0d1a;border:1px solid rgba(99,102,241,0.2);border-radius:6px;
+  padding:2px 6px;font-size:12px;color:#c4b5fd;font-family:monospace;}
+.msg-ai pre{background:#0d0d1a;border:1px solid rgba(99,102,241,0.2);border-radius:10px;
+  padding:14px;overflow-x:auto;margin:8px 0;}
+.msg-ai pre code{background:none;border:none;padding:0;color:#e2e8f0;}
+.msg-ai ul,.msg-ai ol{padding-left:20px;margin:6px 0;}
+.msg-ai li{margin:3px 0;}
+.msg-ai h3{color:#a5b4fc;font-weight:700;margin:10px 0 4px;}
+
+/* Suggestion chips */
+.chip{background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);
+  color:#a5b4fc;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:500;
+  cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.chip:hover{background:rgba(99,102,241,0.2);border-color:#6366f1;color:white;}
+
+/* Cursor blink for typing effect */
+.cursor{display:inline-block;width:2px;height:16px;background:#6366f1;
+  margin-left:2px;vertical-align:middle;animation:blink 0.8s step-end infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+</style>
+</head>
+<body>
+<div class="flex h-screen overflow-hidden">
+
+  <!-- â•â•â• SIDEBAR â•â•â• -->
+  <div id="sidebar" class="flex flex-col">
+    <!-- Logo -->
+    <div class="p-4 border-b border-white/5">
+      <a href="/" class="flex items-center gap-2 mb-4 hover:opacity-80 transition">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm">🚀</div>
+        <span class="text-white font-bold text-sm">CareerPilot AI</span>
+      </a>
+      <button onclick="newChat()" class="w-full flex items-center gap-2 bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/30 text-indigo-300 rounded-xl px-3 py-2.5 text-sm font-semibold transition">
+        <span class="text-lg">+</span> New Chat
+      </button>
+    </div>
+
+    <!-- History -->
+    <div class="flex-1 overflow-y-auto p-3 space-y-1">
+      <div class="text-xs text-slate-600 font-semibold px-2 py-1 uppercase tracking-wider">Recent</div>
+      <div id="history-list"></div>
+    </div>
+
+    <!-- Bottom links -->
+    <div class="p-4 border-t border-white/5 space-y-1">
+      <a href="/" class="hist-item flex items-center gap-2">
+        <span>ðŸ </span> Back to Dashboard
+      </a>
+      <div class="hist-item flex items-center gap-2" onclick="toggleDark()">
+        <span id="dark-icon">â˜€ï¸</span> <span id="dark-label">Light Mode</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- â•â•â• MAIN CHAT AREA â•â•â• -->
+  <div class="flex-1 flex flex-col min-w-0">
+
+    <!-- Top bar -->
+    <div class="flex items-center gap-3 px-5 py-3 border-b border-white/5" style="background:#0d0d14;">
+      <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white transition p-1 rounded-lg hover:bg-white/5">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+        <span class="text-white font-semibold text-sm">CareerPilot AI</span>
+        <span class="text-slate-500 text-xs">· llama3-8b via Groq</span>
+      </div>
+      <div class="ml-auto flex items-center gap-2">
+        <button onclick="clearChat()" class="text-xs text-slate-500 hover:text-slate-300 transition px-3 py-1.5 rounded-lg hover:bg-white/5">Clear</button>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="messages" class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+
+      <!-- Welcome screen -->
+      <div id="welcome" class="flex flex-col items-center justify-center h-full text-center py-12">
+        <div class="text-6xl mb-4">🚀</div>
+        <h1 class="text-3xl font-black text-white mb-2">CareerPilot AI</h1>
+        <p class="text-slate-400 text-base mb-8 max-w-md">Your AI-powered career advisor. Ask me anything about resumes, interviews, career paths, or job search strategies.</p>
+        <div class="flex flex-wrap gap-3 justify-center max-w-lg">
+          <button class="chip" onclick="sendSuggestion(this)">How do I improve my resume?</button>
+          <button class="chip" onclick="sendSuggestion(this)">Prepare me for a Python interview</button>
+          <button class="chip" onclick="sendSuggestion(this)">What skills should a Data Scientist have?</button>
+          <button class="chip" onclick="sendSuggestion(this)">How to negotiate a higher salary?</button>
+          <button class="chip" onclick="sendSuggestion(this)">Write a cold email to a recruiter</button>
+          <button class="chip" onclick="sendSuggestion(this)">Career roadmap for DevOps Engineer</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Input area -->
+    <div class="px-4 pb-5 pt-3 border-t border-white/5" style="background:#0d0d14;">
+      <div class="max-w-3xl mx-auto">
+        <!-- Voice indicator -->
+        <div id="voice-indicator" class="voice-indicator mb-2">
+          <div class="voice-bar"></div><div class="voice-bar"></div>
+          <div class="voice-bar"></div><div class="voice-bar"></div>
+          <div class="voice-bar"></div>
+          <span>Listening... speak now</span>
+          <button onclick="stopMic()" class="ml-auto text-red-400 hover:text-red-300 font-bold text-xs">Stop</button>
+        </div>
+        <!-- TTS toggle -->
+        <div class="flex items-center justify-end gap-2 mb-2">
+          <span class="text-xs text-slate-600">Auto-speak AI responses</span>
+          <button id="tts-toggle" onclick="toggleAutoTTS()"
+            class="w-10 h-5 rounded-full bg-slate-700 relative transition-all duration-200 focus:outline-none">
+            <span id="tts-toggle-dot" class="absolute left-0.5 top-0.5 w-4 h-4 rounded-full bg-slate-400 transition-all duration-200"></span>
+          </button>
+        </div>
+        <div class="flex items-end gap-3 bg-[#1a1a2e] border-2 border-indigo-500/20 rounded-2xl px-4 py-3 focus-within:border-indigo-500/50 transition-all">
+          <textarea id="chat-input" class="chat-input flex-1 bg-transparent border-none outline-none p-0 text-sm"
+            placeholder="Ask anything about your career..." rows="1"
+            onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <!-- Mic button -->
+          <button id="mic-btn" class="mic-btn" onclick="toggleMic()" title="Voice input">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+            </svg>
+          </button>
+          <!-- Send button -->
+          <button id="send-btn" class="send-btn" onclick="sendMessage()">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+            </svg>
+          </button>
+        </div>
+        <div class="text-center text-xs text-slate-600 mt-2">CareerPilot AI can make mistakes. Verify important information.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const API = "http://127.0.0.1:5000";
+let chatHistory = [];
+let sessions = JSON.parse(localStorage.getItem("cp_sessions") || "[]");
+let currentSessionId = null;
+let isStreaming = false;
+let isDark = true;
+
+// â”€â”€ Auto resize textarea â”€â”€
+function autoResize(el) {
+  el.style.height = "auto";
+  el.style.height = Math.min(el.scrollHeight, 160) + "px";
+}
+
+// â”€â”€ Sidebar toggle â”€â”€
+function toggleSidebar() {
+  document.getElementById("sidebar").classList.toggle("collapsed");
+}
+
+// â”€â”€ Dark mode toggle â”€â”€
+function toggleDark() {
+  isDark = !isDark;
+  document.body.style.background = isDark ? "#0d0d14" : "#f8fafc";
+  document.getElementById("dark-icon").textContent = isDark ? "â˜€ï¸" : "ðŸŒ™";
+  document.getElementById("dark-label").textContent = isDark ? "Light Mode" : "Dark Mode";
+}
+
+// â”€â”€ New chat â”€â”€
+function newChat() {
+  chatHistory = [];
+  currentSessionId = Date.now();
+  document.getElementById("messages").innerHTML = `
+    <div id="welcome" class="flex flex-col items-center justify-center h-full text-center py-12">
+      <div class="text-6xl mb-4">🚀</div>
+      <h1 class="text-3xl font-black text-white mb-2">CareerPilot AI</h1>
+      <p class="text-slate-400 text-base mb-8 max-w-md">Ask me anything about resumes, interviews, career paths, or job search strategies.</p>
+      <div class="flex flex-wrap gap-3 justify-center max-w-lg">
+        <button class="chip" onclick="sendSuggestion(this)">How do I improve my resume?</button>
+        <button class="chip" onclick="sendSuggestion(this)">Prepare me for a Python interview</button>
+        <button class="chip" onclick="sendSuggestion(this)">What skills should a Data Scientist have?</button>
+        <button class="chip" onclick="sendSuggestion(this)">How to negotiate a higher salary?</button>
+      </div>
+    </div>`;
+}
+
+// â”€â”€ Clear chat â”€â”€
+function clearChat() { newChat(); }
+
+// â”€â”€ Send suggestion â”€â”€
+function sendSuggestion(btn) {
+  document.getElementById("chat-input").value = btn.textContent;
+  sendMessage();
+}
+
+// â”€â”€ Handle Enter key â”€â”€
+function handleKey(e) {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+// â”€â”€ Render markdown â”€â”€
+function renderMarkdown(text) {
+  return text
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code) =>
+      `<pre><code>${code.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</code></pre>`)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.*?)\*/g, "<em>$1</em>")
+    .replace(/^### (.+)$/gm, "<h3>$1</h3>")
+    .replace(/^## (.+)$/gm, "<h3>$1</h3>")
+    .replace(/^- (.+)$/gm, "<li>$1</li>")
+    .replace(/^\* (.+)$/gm, "<li>$1</li>")
+    .replace(/^(\d+)\. (.+)$/gm, "<li>$2</li>")
+    .replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>")
+    .replace(/\n\n/g, "</p><p>")
+    .replace(/\n/g, "<br/>");
+}
+
+// â”€â”€ Add message bubble â”€â”€
+function addBubble(role, html, id=null) {
+  document.getElementById("welcome")?.remove();
+  const msgs = document.getElementById("messages");
+  const wrap = document.createElement("div");
+  wrap.className = `flex ${role==="user"?"justify-end":"justify-start"} fade-up px-2 max-w-3xl mx-auto w-full`;
+  if (id) wrap.id = id;
+
+  if (role === "user") {
+    wrap.innerHTML = `
+      <div class="flex items-end gap-2 max-w-full">
+        <div class="msg-user">${html}</div>
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold flex-shrink-0">U</div>
+      </div>`;
+  } else {
+    const bubbleId = id ? id+"-content" : "bubble-"+Date.now();
+    const isTyping = id === "typing-indicator";
+    wrap.innerHTML = `
+      <div class="flex items-start gap-2 max-w-full">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center text-xs flex-shrink-0">🤖</div>
+        <div>
+          <div class="msg-ai" id="${bubbleId}">${html}</div>
+          ${!isTyping ? `<div class="flex items-center gap-2 mt-1 ml-1">
+            <button class="tts-btn" onclick="toggleSpeak(this, document.getElementById('${bubbleId}').innerText)" title="Read aloud">ðŸ”Š</button>
+            <span class="text-xs text-slate-600">Read aloud</span>
+          </div>` : ""}
+        </div>
+      </div>`;
+  }
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+  // Auto-speak if enabled
+  if (role === "ai" && !id && autoTTS) {
+    setTimeout(() => speak(html.replace(/<[^>]*>/g,"")), 200);
+  }
+  return wrap;
+}
+
+// â”€â”€ Typing indicator â”€â”€
+function showTyping() {
+  document.getElementById("welcome")?.remove();
+  const msgs = document.getElementById("messages");
+  const wrap = document.createElement("div");
+  wrap.id = "typing-indicator";
+  wrap.className = "flex justify-start fade-up px-2 max-w-3xl mx-auto w-full";
+  wrap.innerHTML = `
+    <div class="flex items-start gap-2">
+      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center text-xs flex-shrink-0">🤖</div>
+      <div class="msg-ai flex items-center gap-1.5 py-3">
+        <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+      </div>
+    </div>`;
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  document.getElementById("typing-indicator")?.remove();
+}
+
+// â”€â”€ Save session â”€â”€
+function saveSession(firstMsg) {
+  if (!currentSessionId) currentSessionId = Date.now();
+  const existing = sessions.findIndex(s => s.id === currentSessionId);
+  const session = { id: currentSessionId, title: firstMsg.slice(0,40)+"...", messages: chatHistory };
+  if (existing >= 0) sessions[existing] = session;
+  else sessions.unshift(session);
+  sessions = sessions.slice(0, 20);
+  localStorage.setItem("cp_sessions", JSON.stringify(sessions));
+  renderHistory();
+}
+
+// â”€â”€ Render history â”€â”€
+function renderHistory() {
+  document.getElementById("history-list").innerHTML = sessions.map(s => `
+    <div class="hist-item ${s.id===currentSessionId?'active':''}" onclick="loadSession(${s.id})">
+      ðŸ’¬ ${s.title}
+    </div>`).join("");
+}
+
+// â”€â”€ Load session â”€â”€
+function loadSession(id) {
+  const s = sessions.find(s => s.id === id);
+  if (!s) return;
+  currentSessionId = id;
+  chatHistory = s.messages;
+  document.getElementById("messages").innerHTML = "";
+  chatHistory.forEach(m => addBubble(m.role==="user"?"user":"ai", m.role==="user"?m.content:renderMarkdown(m.content)));
+  renderHistory();
+}
+
+// â”€â”€ Main send â”€â”€
+async function sendMessage() {
+  if (isStreaming) return;
+  const input = document.getElementById("chat-input");
+  const text  = input.value.trim();
+  if (!text) return;
+
+  input.value = "";
+  input.style.height = "auto";
+  document.getElementById("send-btn").disabled = true;
+  isStreaming = true;
+
+  addBubble("user", text);
+  chatHistory.push({ role: "user", content: text });
+  if (chatHistory.length === 1) saveSession(text);
+
+  showTyping();
+
+  try {
+    const res = await fetch(`${API}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: chatHistory })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "Server error");
+    }
+
+    removeTyping();
+
+    // Create AI bubble for streaming
+    const aiBubbleWrap = addBubble("ai", '<span class="cursor"></span>', "streaming-msg");
+    const contentEl = document.getElementById("streaming-msg-content");
+
+    let fullText = "";
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value);
+      const lines = chunk.split("\n");
+      for (const line of lines) {
+        if (line.startsWith("data: ")) {
+          const data = line.slice(6);
+          if (data === "[DONE]") break;
+          try {
+            const parsed = JSON.parse(data);
+            fullText += parsed.content || "";
+            if (contentEl) {
+              contentEl.innerHTML = renderMarkdown(fullText) + '<span class="cursor"></span>';
+              document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
+            }
+          } catch {}
+        }
+      }
+    }
+
+    // Remove cursor, finalize
+    if (contentEl) contentEl.innerHTML = renderMarkdown(fullText);
+    chatHistory.push({ role: "assistant", content: fullText });
+    saveSession(chatHistory[0].content);
+    // Auto-speak if enabled
+    if (autoTTS && fullText) speak(fullText);
+
+  } catch (e) {
+    removeTyping();
+    addBubble("ai", `<span class="text-red-400">âš ï¸ ${e.message}</span>`);
+  } finally {
+    isStreaming = false;
+    document.getElementById("send-btn").disabled = false;
+    input.focus();
+  }
+}
+
+// â”€â”€ Init â”€â”€
+renderHistory();
+document.getElementById("chat-input").focus();
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// MIC â€” Web Speech API (Speech Recognition)
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+let recognition = null;
+let isRecording = false;
+
+function toggleMic() {
+  if (isRecording) { stopMic(); return; }
+  startMic();
+}
+
+function startMic() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert("Your browser doesn't support voice input. Try Chrome or Edge.");
+    return;
+  }
+  recognition = new SpeechRecognition();
+  recognition.lang = "en-US";
+  recognition.continuous = false;
+  recognition.interimResults = true;
+
+  recognition.onstart = () => {
+    isRecording = true;
+    document.getElementById("mic-btn").classList.add("recording");
+    document.getElementById("voice-indicator").classList.add("active");
+    document.getElementById("chat-input").placeholder = "Listening...";
+  };
+
+  recognition.onresult = (e) => {
+    const transcript = Array.from(e.results).map(r => r[0].transcript).join("");
+    document.getElementById("chat-input").value = transcript;
+    autoResize(document.getElementById("chat-input"));
+    // Auto-send if final result
+    if (e.results[e.results.length - 1].isFinal) {
+      stopMic();
+      setTimeout(() => sendMessage(), 300);
+    }
+  };
+
+  recognition.onerror = (e) => {
+    stopMic();
+    if (e.error !== "aborted") alert("Mic error: " + e.error);
+  };
+
+  recognition.onend = () => stopMic();
+  recognition.start();
+}
+
+function stopMic() {
+  isRecording = false;
+  if (recognition) { try { recognition.stop(); } catch(e){} recognition = null; }
+  document.getElementById("mic-btn").classList.remove("recording");
+  document.getElementById("voice-indicator").classList.remove("active");
+  document.getElementById("chat-input").placeholder = "Ask anything about your career...";
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// TTS â€” Web Speech Synthesis API
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+let autoTTS = false;
+let currentUtterance = null;
+
+function toggleAutoTTS() {
+  autoTTS = !autoTTS;
+  const toggle = document.getElementById("tts-toggle");
+  const dot    = document.getElementById("tts-toggle-dot");
+  if (autoTTS) {
+    toggle.style.background = "#6366f1";
+    dot.style.transform = "translateX(20px)";
+    dot.style.background = "white";
+  } else {
+    toggle.style.background = "";
+    dot.style.transform = "";
+    dot.style.background = "";
+    stopSpeaking();
+  }
+}
+
+function speak(text, btnEl) {
+  // Stop any current speech
+  stopSpeaking();
+  // Strip HTML tags
+  const clean = text.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  if (!clean) return;
+
+  currentUtterance = new SpeechSynthesisUtterance(clean);
+  currentUtterance.rate  = 1.0;
+  currentUtterance.pitch = 1.0;
+  currentUtterance.lang  = "en-US";
+
+  // Pick a good voice if available
+  const voices = speechSynthesis.getVoices();
+  const preferred = voices.find(v => v.name.includes("Google") && v.lang === "en-US")
+                 || voices.find(v => v.lang === "en-US");
+  if (preferred) currentUtterance.voice = preferred;
+
+  if (btnEl) {
+    btnEl.classList.add("speaking");
+    btnEl.textContent = "â¹";
+    currentUtterance.onend = () => {
+      btnEl.classList.remove("speaking");
+      btnEl.textContent = "ðŸ”Š";
+      currentUtterance = null;
+    };
+  }
+  speechSynthesis.speak(currentUtterance);
+}
+
+function stopSpeaking() {
+  speechSynthesis.cancel();
+  currentUtterance = null;
+  // Reset all TTS buttons
+  document.querySelectorAll(".tts-btn").forEach(b => {
+    b.classList.remove("speaking");
+    b.textContent = "ðŸ”Š";
+  });
+}
+
+function toggleSpeak(btnEl, text) {
+  if (currentUtterance) { stopSpeaking(); return; }
+  speak(text, btnEl);
+}
+</script>
+</body>
+</html>
+
+

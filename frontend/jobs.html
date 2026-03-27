@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Job Finder â€” CareerPilot AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{font-family:'Inter',sans-serif;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#0a0a0f;color:#e2e8f0;min-height:100vh;background-image:url('https://picsum.photos/id/1020/1600/900');background-size:cover;background-position:center;background-attachment:fixed;}
+.hero-bg{background:linear-gradient(135deg,#0f0c29 0%,#1a1040 40%,#0d1b3e 100%);position:relative;overflow:hidden;}
+.hero-bg::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 20% 40%,rgba(99,102,241,0.2) 0%,transparent 60%),
+             radial-gradient(ellipse 60% 50% at 80% 20%,rgba(139,92,246,0.15) 0%,transparent 55%);}
+.glass{background:rgba(255,255,255,0.05);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1);}
+.card{background:#13131f;border:1px solid rgba(99,102,241,0.15);border-radius:20px;transition:all 0.3s;}
+.card:hover{border-color:rgba(99,102,241,0.4);box-shadow:0 0 30px rgba(99,102,241,0.1);}
+.btn{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;font-weight:700;border-radius:14px;
+  padding:12px 24px;border:none;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px rgba(99,102,241,0.4);}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(99,102,241,0.5);}
+.inp{width:100%;background:#1e1e2e;border:2px solid rgba(99,102,241,0.2);border-radius:12px;
+  padding:14px 18px;color:#e2e8f0;font-size:15px;outline:none;transition:all 0.2s;}
+.inp:focus{border-color:#6366f1;box-shadow:0 0 0 4px rgba(99,102,241,0.1);}
+.inp::placeholder{color:#4b5563;}
+.tag{background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);color:#a5b4fc;
+  border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.tag:hover{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;border-color:transparent;}
+.job-link{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;
+  border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02);
+  text-decoration:none;transition:all 0.2s;group;}
+.job-link:hover{border-color:rgba(99,102,241,0.4);background:rgba(99,102,241,0.05);transform:translateX(4px);}
+.nav-item{color:rgba(255,255,255,0.65);font-size:14px;font-weight:500;text-decoration:none;
+  padding:8px 14px;border-radius:8px;transition:all 0.2s;}
+.nav-item:hover{color:white;background:rgba(255,255,255,0.08);}
+.fade-up{animation:fadeUp 0.4s ease forwards;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.cat-tab{padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;
+  color:#6b7280;transition:all 0.2s;border:1px solid transparent;}
+.cat-tab.active{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;border-color:transparent;}
+.cat-tab:hover:not(.active){color:#a5b4fc;border-color:rgba(99,102,241,0.3);}
+</style>
+<style>
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.07;
+  transition: opacity 2s;
+}
+</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;background:rgba(10,10,15,0.55);z-index:0;pointer-events:none;"></div>
+
+<nav style="position:sticky;top:0;z-index:99999;background:linear-gradient(135deg,rgba(15,12,41,0.97),rgba(48,43,99,0.97));backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08);"><div style="max-width:1280px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:18px;">🚀</div><div><div style="color:white;font-weight:900;font-size:15px;line-height:1;">CareerPilot</div><div style="color:#818cf8;font-size:11px;font-weight:600;">AI</div></div></a><div style="display:flex;align-items:center;gap:2px;"><a href="/" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Home</a><a href="/resume.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Resume</a><a href="/roadmap.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Roadmap</a><a href="/interview.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Interview</a><a href="/courses.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Courses</a><a href="/jobs.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Jobs</a><a href="/chat.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">AI Chat</a></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0;"><div id="user-bar" style="display:none;align-items:center;gap:8px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);border-radius:10px;padding:6px 12px;"><img id="user-bar-avatar" style="width:24px;height:24px;border-radius:50%;object-fit:cover;display:none;" src=""/><span style="font-size:15px;">👤</span><a href="/profile.html" id="user-bar-name" style="color:#a5b4fc;font-size:13px;font-weight:600;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:none;cursor:pointer;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" style="color:#a5b4fc;font-size:13px;font-weight:600;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></a><button onclick="fbSignOut()" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#fca5a5;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;cursor:pointer;">Sign Out</button></div><a id="nav-login-btn" href="/login.html" style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:white;font-weight:600;font-size:13px;text-decoration:none;padding:7px 14px;border-radius:10px;">🔑 Sign In</a></div></div></nav>
+
+<!-- HERO -->
+<section class="hero-bg py-16 px-6 text-center relative">
+  <div class="max-w-3xl mx-auto relative z-10">
+    <div class="glass inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm text-indigo-300 font-medium mb-6">
+      <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+      Live job links · Updated in real-time
+    </div>
+    <h1 class="text-5xl md:text-6xl font-black text-white mb-4 leading-tight">Find Your <span class="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Dream Job</span></h1>
+    <p class="text-slate-400 text-lg mb-8">Search any tech role across LinkedIn, Indeed, Naukri, Glassdoor and top MNCs â€” all in one place.</p>
+
+    <!-- Search -->
+    <div class="flex gap-3 max-w-2xl mx-auto">
+      <input id="job-input" class="inp flex-1" placeholder="Type any tech role e.g. Data Scientist, Flutter Developer..." onkeydown="if(event.key==='Enter')findJobs()"/>
+      <button onclick="findJobs()" class="btn px-8 whitespace-nowrap text-base"><svg width="16" height="16" fill="none" stroke="white" viewBox="0 0 24 24" style="display:inline;margin-right:6px;vertical-align:middle;"><circle cx="11" cy="11" r="8" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M21 21l-4.35-4.35"/></svg>Search</button>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="max-w-6xl mx-auto px-4 py-10 space-y-10" style="position:relative;z-index:1;">
+
+  <!-- Role categories -->
+  <div class="card p-6">
+    <div class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-4">Browse by Category</div>
+    <div class="flex flex-wrap gap-2 mb-5" id="cat-tabs">
+      <button class="cat-tab active" onclick="filterCat(this,'all')">All Roles</button>
+      <button class="cat-tab" onclick="filterCat(this,'web')">Web Dev</button>
+      <button class="cat-tab" onclick="filterCat(this,'data')">Data & AI</button>
+      <button class="cat-tab" onclick="filterCat(this,'cloud')">Cloud & DevOps</button>
+      <button class="cat-tab" onclick="filterCat(this,'mobile')">Mobile</button>
+      <button class="cat-tab" onclick="filterCat(this,'security')">Security</button>
+      <button class="cat-tab" onclick="filterCat(this,'design')">Design & PM</button>
+      <button class="cat-tab" onclick="filterCat(this,'other')">Other Tech</button>
+    </div>
+    <div id="role-chips" class="flex flex-wrap gap-2"></div>
+  </div>
+
+  <!-- Results -->
+  <div id="job-results" class="hidden fade-up space-y-8">
+
+    <!-- Role header -->
+    <div class="flex items-center gap-4 p-5 rounded-2xl" style="background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(139,92,246,0.08));border:1px solid rgba(99,102,241,0.25);">
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl">&#x1F4BC;</div>
+      <div>
+        <div id="result-title" class="text-white font-black text-2xl"></div>
+        <div class="text-slate-400 text-sm mt-1">Click any link to open job listings in a new tab</div>
+      </div>
+    </div>
+
+    <!-- All companies -->
+    <div>
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
+        <span class="text-sm font-bold text-indigo-400 uppercase tracking-wider">All Companies</span>
+      </div>
+      <div id="general-links" class="grid md:grid-cols-2 gap-3"></div>
+    </div>
+
+    <!-- MNCs -->
+    <div>
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-3 h-3 rounded-full bg-green-500"></span>
+        <span class="text-sm font-bold text-green-400 uppercase tracking-wider">Top MNC Companies</span>
+        <span class="text-xs text-slate-500">(LinkedIn filtered)</span>
+      </div>
+      <div id="mnc-links" class="grid md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+    </div>
+
+    <!-- India -->
+    <div>
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-3 h-3 rounded-full bg-orange-500"></span>
+        <span class="text-sm font-bold text-orange-400 uppercase tracking-wider">India Job Portals</span>
+      </div>
+      <div id="india-links" class="grid md:grid-cols-2 gap-3"></div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="hero-bg border-t border-white/5 py-8 text-center mt-10">
+  <div class="text-indigo-400 text-sm">CareerPilot AI · Job Finder</div>
+</footer>
+
+<script>
+const ROLES = {
+  web:      ["Frontend Developer","Backend Developer","Full Stack Developer","React Developer","Angular Developer","Vue.js Developer","Node.js Developer","PHP Developer","Django Developer","Spring Boot Developer","GraphQL Developer","TypeScript Developer"],
+  data:     ["Data Scientist","Data Analyst","Data Engineer","ML Engineer","AI Engineer","NLP Engineer","Computer Vision Engineer","Business Intelligence Analyst","Big Data Engineer","Research Scientist","Prompt Engineer","LLM Engineer"],
+  cloud:    ["DevOps Engineer","Cloud Engineer","AWS Engineer","Azure Engineer","GCP Engineer","Site Reliability Engineer","Platform Engineer","Kubernetes Engineer","Terraform Engineer","CI/CD Engineer","Linux Administrator","Network Engineer"],
+  mobile:   ["Android Developer","iOS Developer","Flutter Developer","React Native Developer","Mobile Developer","Swift Developer","Kotlin Developer","Xamarin Developer"],
+  security: ["Cybersecurity Analyst","Security Engineer","Penetration Tester","SOC Analyst","Cloud Security Engineer","Application Security Engineer","Ethical Hacker","Information Security Analyst"],
+  design:   ["UI/UX Designer","Product Manager","Scrum Master","Product Designer","UX Researcher","Interaction Designer","Design Lead","Technical Program Manager"],
+  other:    ["QA Engineer","Test Automation Engineer","Blockchain Developer","Game Developer","Embedded Systems Engineer","Database Administrator","Python Developer","Java Developer","Salesforce Developer","SAP Consultant","ERP Consultant","IT Support Engineer"]
+};
+
+const MNCS = [
+  {name:"Google",     id:"1441",  color:"from-blue-500 to-cyan-500"},
+  {name:"Microsoft",  id:"1035",  color:"from-blue-600 to-blue-700"},
+  {name:"Amazon",     id:"1586",  color:"from-orange-500 to-yellow-500"},
+  {name:"Meta",       id:"10667", color:"from-blue-500 to-indigo-600"},
+  {name:"Apple",      id:"162479",color:"from-slate-500 to-slate-600"},
+  {name:"Netflix",    id:"165158",color:"from-red-600 to-red-700"},
+  {name:"IBM",        id:"1009",  color:"from-blue-700 to-blue-800"},
+  {name:"Oracle",     id:"1067",  color:"from-red-500 to-orange-500"},
+  {name:"SAP",        id:"10156", color:"from-blue-400 to-cyan-400"},
+  {name:"Salesforce", id:"2101",  color:"from-sky-500 to-blue-500"},
+  {name:"Infosys",    id:"1283",  color:"from-indigo-600 to-purple-600"},
+  {name:"TCS",        id:"13796", color:"from-blue-600 to-indigo-600"},
+  {name:"Wipro",      id:"11544", color:"from-violet-600 to-purple-600"},
+  {name:"Accenture",  id:"1033",  color:"from-purple-600 to-pink-600"},
+  {name:"Cognizant",  id:"1680",  color:"from-blue-500 to-blue-600"},
+  {name:"Capgemini",  id:"2142",  color:"from-sky-600 to-blue-600"},
+  {name:"HCL",        id:"4323",  color:"from-green-600 to-teal-600"},
+  {name:"Deloitte",   id:"1038",  color:"from-green-500 to-emerald-500"},
+  {name:"Zoho",       id:"2141",  color:"from-red-500 to-rose-500"},
+  {name:"Flipkart",   id:"2614",  color:"from-yellow-500 to-orange-500"},
+];
+
+let currentCat = "all";
+
+function getAllRoles() {
+  return Object.values(ROLES).flat();
+}
+
+function getRolesByCat(cat) {
+  return cat === "all" ? getAllRoles() : (ROLES[cat] || []);
+}
+
+function renderChips(cat) {
+  const roles = getRolesByCat(cat);
+  document.getElementById("role-chips").innerHTML = roles.map(r => `
+    <button class="tag" onclick="quickSearch('${r}')">${r}</button>`).join("");
+}
+
+function filterCat(btn, cat) {
+  currentCat = cat;
+  document.querySelectorAll(".cat-tab").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderChips(cat);
+}
+
+function quickSearch(role) {
+  document.getElementById("job-input").value = role;
+  findJobs();
+  document.getElementById("job-results").scrollIntoView({behavior:"smooth"});
+}
+
+function findJobs() {
+  const role = document.getElementById("job-input").value.trim();
+  if (!role) return alert("Please enter a job role.");
+  const enc = encodeURIComponent(role);
+
+  document.getElementById("result-title").textContent = role + " Jobs";
+  document.getElementById("job-results").classList.remove("hidden");
+
+  // General
+  const general = [
+    {icon:"&#x1F4BC;", name:"LinkedIn Jobs", sub:"All companies · Remote & On-site", color:"from-blue-600 to-blue-700", url:`https://www.linkedin.com/jobs/search/?keywords=${enc}`},
+    {icon:"&#x1F50D;", name:"Indeed", sub:"Latest postings worldwide", color:"from-indigo-600 to-indigo-700", url:`https://www.indeed.com/jobs?q=${enc}&sort=date`},
+    {icon:"&#x1F3E2;", name:"Glassdoor", sub:"With salary & company reviews", color:"from-green-600 to-emerald-600", url:`https://www.glassdoor.com/Job/jobs.htm?sc.keyword=${enc}&sortBy=date_desc`},
+    {icon:"&#x1F30D;", name:"We Work Remotely", sub:"100% Remote jobs only", color:"from-purple-600 to-violet-600", url:`https://weworkremotely.com/remote-jobs/search?term=${enc}`},
+    {icon:"&#x26A1;", name:"AngelList / Wellfound", sub:"Startups & funded companies", color:"from-pink-600 to-rose-600", url:`https://wellfound.com/jobs?q=${enc}`},
+    {icon:"&#x1F3AF;", name:"Dice", sub:"Tech jobs specialist", color:"from-red-600 to-orange-600", url:`https://www.dice.com/jobs?q=${enc}&sort=relevance`},
+  ];
+
+  document.getElementById("general-links").innerHTML = general.map(j => `
+    <a href="${j.url}" target="_blank" rel="noopener" class="job-link">
+      <div class="w-11 h-11 rounded-xl bg-gradient-to-br ${j.color} flex items-center justify-center text-xl flex-shrink-0">${j.icon}</div>
+      <div class="flex-1 min-w-0">
+        <div class="text-white font-semibold text-sm">${j.name}</div>
+        <div class="text-slate-500 text-xs mt-0.5">${j.sub}</div>
+      </div>
+      <span class="text-slate-600 text-lg">&#x2197;</span>
+    </a>`).join("");
+
+  // MNCs
+  document.getElementById("mnc-links").innerHTML = MNCS.map(c => `
+    <a href="https://www.linkedin.com/jobs/search/?keywords=${enc}&f_C=${c.id}" target="_blank" rel="noopener" class="job-link">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br ${c.color} flex items-center justify-center text-sm font-black text-white flex-shrink-0">${c.name[0]}</div>
+      <div class="flex-1 min-w-0">
+        <div class="text-white font-semibold text-sm truncate">${c.name}</div>
+        <div class="text-slate-500 text-xs">LinkedIn</div>
+      </div>
+      <span class="text-slate-600 text-sm">&#x2197;</span>
+    </a>`).join("");
+
+  // India
+  const india = [
+    {icon:"&#x1F1EE;&#x1F1F3;", name:"Naukri.com", sub:"India's #1 job portal", color:"from-orange-500 to-red-500", url:`https://www.naukri.com/${role.toLowerCase().replace(/\s+/g,"-")}-jobs`},
+    {icon:"&#x1F4A1;", name:"LinkedIn India", sub:"India · All experience levels", color:"from-blue-600 to-blue-700", url:`https://www.linkedin.com/jobs/search/?keywords=${enc}&location=India`},
+    {icon:"&#x1F393;", name:"Internshala", sub:"Jobs + Internships · Freshers welcome", color:"from-teal-500 to-cyan-500", url:`https://internshala.com/jobs/${role.toLowerCase().replace(/\s+/g,"-")}-jobs`},
+    {icon:"&#x1F680;", name:"Foundit (Monster)", sub:"Top companies in India", color:"from-violet-500 to-purple-600", url:`https://www.foundit.in/srp/results?query=${enc}&location=India`},
+    {icon:"&#x2B50;", name:"Shine.com", sub:"Premium job listings India", color:"from-yellow-500 to-orange-500", url:`https://www.shine.com/job-search/${role.toLowerCase().replace(/\s+/g,"-")}-jobs`},
+    {icon:"&#x1F3C6;", name:"TimesJobs", sub:"Times Group job portal", color:"from-red-500 to-rose-500", url:`https://www.timesjobs.com/candidate/job-search.html?searchType=personalizedSearch&from=submit&txtKeywords=${enc}`},
+  ];
+
+  document.getElementById("india-links").innerHTML = india.map(j => `
+    <a href="${j.url}" target="_blank" rel="noopener" class="job-link">
+      <div class="w-11 h-11 rounded-xl bg-gradient-to-br ${j.color} flex items-center justify-center text-xl flex-shrink-0">${j.icon}</div>
+      <div class="flex-1 min-w-0">
+        <div class="text-white font-semibold text-sm">${j.name}</div>
+        <div class="text-slate-500 text-xs mt-0.5">${j.sub}</div>
+      </div>
+      <span class="text-slate-600 text-lg">&#x2197;</span>
+    </a>`).join("");
+}
+
+// Init chips
+renderChips("all");
+
+// Auto-search if role passed in URL
+const params = new URLSearchParams(window.location.search);
+if (params.get("role")) {
+  document.getElementById("job-input").value = params.get("role");
+  findJobs();
+}
+</script>
+<script>
+(function(){
+  // Picsum Photos - free, no API key, always works
+  const IDS = [1015,1016,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1035,1036];
+  let i = Math.floor(Math.random() * IDS.length);
+  function setBg(){
+    const id = IDS[i % IDS.length];
+    const url = 'https://picsum.photos/id/' + id + '/1600/900';
+    let bgEl = document.getElementById('_bg');
+    if(!bgEl){
+      bgEl = document.createElement('div');
+      bgEl.id = '_bg';
+      bgEl.style.cssText = 'position:fixed;inset:0;z-index:0;background-size:cover;background-position:center;opacity:0;transition:opacity 2.5s ease;pointer-events:none;filter:brightness(0.6) saturate(0.8);';
+      document.body.prepend(bgEl);
+    }
+    const img = new Image();
+    img.onload = function(){
+      bgEl.style.backgroundImage = 'url(' + url + ')';
+      bgEl.style.opacity = '0.18';
+    };
+    img.src = url;
+    i++;
+  }
+  setBg();
+  setInterval(function(){
+    const el = document.getElementById('_bg');
+    if(el){ el.style.opacity = '0'; setTimeout(setBg, 2500); }
+  }, 18000);
+})();
+</script>
+</body>
+</html>
+
+
+
+
+

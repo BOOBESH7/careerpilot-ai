@@ -1,0 +1,1079 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CareerPilot AI â€” Your Career Co-Pilot</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{font-family:'Inter',sans-serif;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#0a0a0f;color:#e2e8f0;}
+
+/* â”€â”€ Animated BG â”€â”€ */
+.hero-bg{
+  background:linear-gradient(135deg,#0f0c29 0%,#1a1040 40%,#0d1b3e 100%);
+  position:relative;overflow:hidden;
+}
+.hero-bg::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 40%,rgba(99,102,241,0.25) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 20%,rgba(139,92,246,0.2) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 40% at 60% 80%,rgba(6,182,212,0.15) 0%,transparent 50%);
+  animation:bgPulse 8s ease-in-out infinite alternate;
+}
+@keyframes bgPulse{0%{opacity:.7;}100%{opacity:1;}}
+
+/* â”€â”€ Particles â”€â”€ */
+.particle{position:absolute;border-radius:50%;animation:float linear infinite;opacity:0.4;}
+@keyframes float{0%{transform:translateY(100vh) scale(0);}100%{transform:translateY(-10vh) scale(1);opacity:0;}}
+
+/* â”€â”€ Glass â”€â”€ */
+.glass{background:rgba(255,255,255,0.05);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1);}
+.glass-dark{background:rgba(0,0,0,0.3);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);}
+
+/* â”€â”€ Cards â”€â”€ */
+.card{background:#13131f;border:1px solid rgba(99,102,241,0.15);border-radius:24px;transition:all 0.3s;}
+.card:hover{border-color:rgba(99,102,241,0.4);box-shadow:0 0 40px rgba(99,102,241,0.1);}
+
+/* â”€â”€ Buttons â”€â”€ */
+.btn{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;font-weight:700;
+  border-radius:14px;padding:14px 28px;border:none;cursor:pointer;
+  transition:all 0.2s;box-shadow:0 4px 24px rgba(99,102,241,0.4);font-size:15px;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(99,102,241,0.5);}
+.btn:active{transform:translateY(0);}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.btn-sm{padding:10px 20px;font-size:13px;border-radius:10px;}
+.btn-outline{background:transparent;border:2px solid rgba(99,102,241,0.5);color:#a5b4fc;}
+.btn-outline:hover{background:rgba(99,102,241,0.1);border-color:#6366f1;}
+
+/* â”€â”€ Inputs â”€â”€ */
+.inp{width:100%;background:#1e1e2e;border:2px solid rgba(99,102,241,0.2);border-radius:12px;
+  padding:12px 16px;color:#e2e8f0;font-size:14px;outline:none;transition:all 0.2s;}
+.inp:focus{border-color:#6366f1;box-shadow:0 0 0 4px rgba(99,102,241,0.1);}
+.inp::placeholder{color:#4b5563;}
+
+/* â”€â”€ Tabs â”€â”€ */
+.tab{padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;
+  color:#6b7280;transition:all 0.2s;border:none;background:transparent;}
+.tab.active{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;box-shadow:0 4px 16px rgba(99,102,241,0.3);}
+.tab:hover:not(.active){color:#a5b4fc;background:rgba(99,102,241,0.1);}
+
+/* â”€â”€ Score Ring â”€â”€ */
+.score-ring{position:relative;width:140px;height:140px;}
+.score-ring svg{transform:rotate(-90deg);}
+.score-ring .score-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+
+/* â”€â”€ Progress Bar â”€â”€ */
+.prog-bar{height:8px;background:#1e1e2e;border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#6366f1,#8b5cf6);transition:width 1s ease;}
+
+/* â”€â”€ Chat â”€â”€ */
+.chat-user{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;border-radius:20px 20px 4px 20px;padding:12px 18px;max-width:78%;font-size:14px;line-height:1.6;}
+.chat-ai{background:#1e1e2e;border:1px solid rgba(99,102,241,0.2);color:#e2e8f0;border-radius:20px 20px 20px 4px;padding:12px 18px;max-width:82%;font-size:14px;line-height:1.6;}
+#chat-box{scrollbar-width:thin;scrollbar-color:#4f46e5 transparent;}
+#chat-box::-webkit-scrollbar{width:4px;}
+#chat-box::-webkit-scrollbar-thumb{background:#4f46e5;border-radius:4px;}
+
+/* â”€â”€ Animations â”€â”€ */
+.fade-up{animation:fadeUp 0.5s ease forwards;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.pulse-dot{animation:pulseDot 1.5s ease-in-out infinite;}
+@keyframes pulseDot{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.4);opacity:0.6;}}
+
+/* â”€â”€ Upload Zone â”€â”€ */
+.upload-zone{border:2px dashed rgba(99,102,241,0.3);border-radius:16px;padding:24px;text-align:center;
+  cursor:pointer;transition:all 0.2s;background:rgba(99,102,241,0.03);}
+.upload-zone:hover{border-color:#6366f1;background:rgba(99,102,241,0.08);}
+
+/* â”€â”€ Badge â”€â”€ */
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;}
+.badge-tech{background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(99,102,241,0.3);}
+.badge-beh{background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3);}
+.badge-sit{background:rgba(245,158,11,0.15);color:#fcd34d;border:1px solid rgba(245,158,11,0.3);}
+
+/* â”€â”€ Milestone â”€â”€ */
+.milestone{position:relative;padding-left:32px;}
+.milestone::before{content:'';position:absolute;left:10px;top:24px;bottom:-8px;width:2px;background:linear-gradient(180deg,#6366f1,transparent);}
+.milestone:last-child::before{display:none;}
+.milestone-dot{position:absolute;left:0;top:6px;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:10px;}
+
+/* â”€â”€ Nav â”€â”€ */
+.nav-item{color:rgba(255,255,255,0.6);font-size:14px;font-weight:500;text-decoration:none;padding:8px 16px;border-radius:8px;transition:all 0.2s;position:relative;z-index:100;cursor:pointer;}
+.nav-item:hover{color:white;background:rgba(255,255,255,0.08);}
+
+/* â”€â”€ Section header â”€â”€ */
+.sec-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#6366f1;margin-bottom:8px;}
+</style>
+</head>
+<body>
+
+<!-- Particles -->
+<div id="particles" style="position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;"></div>
+<!-- Global background image -->
+<div id="_bg" style="position:fixed;inset:0;z-index:0;background-size:cover;background-position:center;opacity:0;transition:opacity 2.5s ease;pointer-events:none;filter:brightness(0.35) saturate(0.7);"></div>
+
+<!-- â•â•â• NAVBAR â•â•â• -->
+<nav style="position:sticky;top:0;z-index:99999;background:linear-gradient(135deg,rgba(15,12,41,0.97),rgba(48,43,99,0.97));backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08);"><div style="max-width:1280px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:18px;">🚀</div><div><div style="color:white;font-weight:900;font-size:15px;line-height:1;">CareerPilot</div><div style="color:#818cf8;font-size:11px;font-weight:600;">AI</div></div></a><div style="display:flex;align-items:center;gap:2px;"><a href="/" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Home</a><a href="/resume.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Resume</a><a href="/roadmap.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Roadmap</a><a href="/interview.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Interview</a><a href="/courses.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Courses</a><a href="/jobs.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Jobs</a><a href="/chat.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">AI Chat</a></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0;"><div id="user-bar" style="display:none;align-items:center;gap:8px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);border-radius:10px;padding:6px 12px;"><img id="user-bar-avatar" style="width:24px;height:24px;border-radius:50%;object-fit:cover;display:none;" src=""/><span style="font-size:15px;">👤</span><a href="/profile.html" id="user-bar-name" style="color:#a5b4fc;font-size:13px;font-weight:600;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:none;cursor:pointer;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" style="color:#a5b4fc;font-size:13px;font-weight:600;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></a><button onclick="fbSignOut()" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#fca5a5;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;cursor:pointer;">Sign Out</button></div><a id="nav-login-btn" href="/login.html" style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:white;font-weight:600;font-size:13px;text-decoration:none;padding:7px 14px;border-radius:10px;">🔑 Sign In</a></div></div></nav>
+
+<!-- â•â•â• HERO â•â•â• -->
+<section class="hero-bg py-28 px-6 text-center" style="position:relative;">
+  <!-- Real-time background image from Unsplash -->
+  <div id="hero-bg-img" style="position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;opacity:0;transition:opacity 2s ease;"></div>
+  <!-- Dark overlay so text stays readable -->
+  <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(15,12,41,0.88),rgba(26,16,64,0.85),rgba(13,27,62,0.88));"></div>
+  <div class="max-w-4xl mx-auto" style="position:relative;z-index:2;">
+    <div class="glass inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm text-indigo-300 font-medium mb-8">
+      <span class="w-2 h-2 bg-green-400 rounded-full pulse-dot"></span>
+      Powered by Google Gemini AI · Real-time Career Intelligence
+    </div>
+    <h1 class="text-6xl md:text-8xl font-black text-white mb-6 leading-none tracking-tight">
+      Land Your<br/>
+      <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Dream Job</span>
+    </h1>
+    <p class="text-slate-400 text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
+      AI-powered resume scoring, personalized career roadmaps, interview prep, and course recommendations — all in one platform.
+    </p>
+    <div class="flex flex-wrap justify-center gap-4 mb-16">
+      <button onclick="document.getElementById('score-section').scrollIntoView({behavior:'smooth'})" class="btn px-10 py-4 text-lg rounded-2xl">Analyze My Resume ✨</button>
+      <button onclick="document.getElementById('chat-section').scrollIntoView({behavior:'smooth'})" class="btn btn-outline px-10 py-4 text-lg rounded-2xl">Chat with AI 💬</button>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+      <div class="glass rounded-2xl p-4"><div class="text-3xl font-black text-white">100</div><div class="text-indigo-300 text-xs mt-1">Point Scoring</div></div>
+      <div class="glass rounded-2xl p-4"><div class="text-3xl font-black text-white">15+</div><div class="text-indigo-300 text-xs mt-1">Interview Qs</div></div>
+      <div class="glass rounded-2xl p-4"><div class="text-3xl font-black text-white">12mo</div><div class="text-indigo-300 text-xs mt-1">Roadmap</div></div>
+      <div class="glass rounded-2xl p-4"><div class="text-3xl font-black text-white">PDF</div><div class="text-indigo-300 text-xs mt-1">Upload Support</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- â•â•â• MAIN â•â•â• -->
+<main class="max-w-5xl mx-auto px-4 py-16 space-y-24">
+
+<!-- â”€â”€ 1. RESUME SCORE â”€â”€ -->
+<section id="score-section">
+  <div class="sec-label">Feature 01</div>
+  <h2 class="text-4xl font-black text-white mb-2">Resume Score Engine</h2>
+  <p class="text-slate-400 mb-8">Upload your resume (PDF/PNG/JSON) or paste it. Get a detailed score breakdown across 6 categories.</p>
+  <div class="card p-8 space-y-6">
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-semibold text-slate-400 mb-2">Target Role</label>
+        <input id="score-role" class="inp" placeholder="e.g. Software Developer, Data Scientist..."/>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-400 mb-2">Upload Resume</label>
+        <label for="score-file" class="upload-zone block cursor-pointer">
+          <input type="file" id="score-file" accept=".pdf,.json,.png,.jpg" class="hidden" onchange="handleScoreFile(event)"/>
+          <div id="score-file-ph"><div class="text-2xl mb-1">&#9679;</div><div class="text-sm text-slate-400">PDF, JSON, PNG</div></div>
+          <div id="score-file-sel" class="hidden"><div class="text-2xl mb-1">&#9989;</div><div id="score-file-name" class="text-sm text-indigo-400 font-semibold"></div></div>
+        </label>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-slate-400 mb-2">Or paste resume text</label>
+      <textarea id="score-resume" rows="5" class="inp resize-none" placeholder="Paste your resume here..."></textarea>
+    </div>
+    <button onclick="scoreResume()" class="btn w-full text-base" id="score-btn">
+      <span id="score-btn-text">&#10024; Analyze & Score Resume</span>
+      <span id="score-spinner" class="hidden">â³ Analyzing...</span>
+    </button>
+
+    <!-- Score Result -->
+    <div id="score-result" class="hidden fade-up space-y-6">
+      <div class="flex flex-col md:flex-row items-center gap-8 p-6 rounded-2xl" style="background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(139,92,246,0.1));border:1px solid rgba(99,102,241,0.2);">
+        <div class="score-ring flex-shrink-0">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="58" fill="none" stroke="#1e1e2e" stroke-width="12"/>
+            <circle id="score-circle" cx="70" cy="70" r="58" fill="none" stroke="url(#scoreGrad)" stroke-width="12" stroke-linecap="round" stroke-dasharray="364" stroke-dashoffset="364"/>
+            <defs><linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs>
+          </svg>
+          <div class="score-num"><span id="score-num" class="text-4xl font-black text-white">0</span><span class="text-xs text-slate-400">/ 100</span></div>
+        </div>
+        <div class="flex-1">
+          <div id="score-summary" class="text-slate-300 text-sm leading-relaxed mb-4"></div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><div class="text-xs text-green-400 font-semibold mb-1">&#9989; Top Strengths</div><div id="score-strengths" class="text-xs text-slate-400 space-y-1"></div></div>
+            <div><div class="text-xs text-red-400 font-semibold mb-1">âš ï¸ Critical Gaps</div><div id="score-gaps" class="text-xs text-slate-400 space-y-1"></div></div>
+          </div>
+        </div>
+      </div>
+      <div id="score-breakdown" class="grid md:grid-cols-2 gap-4"></div>
+    </div>
+  </div>
+</section>
+
+<!-- â”€â”€ 2. CAREER ROADMAP â”€â”€ -->
+<section id="roadmap-section">
+  <div class="sec-label">Feature 02</div>
+  <h2 class="text-4xl font-black text-white mb-2">Career Roadmap</h2>
+  <p class="text-slate-400 mb-8">Get a personalized 12-month roadmap with skill gaps, milestones, and immediate action steps.</p>
+  <div class="card p-8 space-y-5">
+    <div class="grid md:grid-cols-2 gap-5">
+      <div>
+        <label class="block text-sm font-semibold text-slate-400 mb-2">Current Role</label>
+        <input id="current-role" class="inp" placeholder="e.g. Junior Developer, Student..."/>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-400 mb-2">Target Role</label>
+        <input id="roadmap-role" class="inp" placeholder="e.g. Senior Software Engineer..."/>
+        <div class="flex flex-wrap gap-2 mt-2">
+          <button onclick="setRoadmapRole('Software Developer')"  class="btn btn-outline btn-sm">Software Dev</button>
+          <button onclick="setRoadmapRole('Data Scientist')"      class="btn btn-outline btn-sm">Data Scientist</button>
+          <button onclick="setRoadmapRole('DevOps Engineer')"     class="btn btn-outline btn-sm">DevOps</button>
+          <button onclick="setRoadmapRole('ML Engineer')"         class="btn btn-outline btn-sm">ML Engineer</button>
+        </div>
+      </div>
+    </div>
+    <button onclick="generateRoadmap()" class="btn w-full text-base">
+      <span id="roadmap-btn-text">&#128506; Generate My Roadmap</span>
+      <span id="roadmap-spinner" class="hidden">â³ Building roadmap...</span>
+    </button>
+    <div id="roadmap-result" class="hidden fade-up space-y-6">
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="card p-4 col-span-1">
+          <div class="text-xs text-red-400 font-bold mb-3">âš ï¸ SKILL GAPS</div>
+          <div id="roadmap-gaps" class="space-y-2"></div>
+        </div>
+        <div class="card p-4 col-span-2">
+          <div class="text-xs text-green-400 font-bold mb-3">âš¡ IMMEDIATE ACTIONS</div>
+          <div id="roadmap-actions" class="space-y-2"></div>
+        </div>
+      </div>
+      <div>
+        <div class="text-xs text-indigo-400 font-bold mb-4">&#9679; 12-MONTH MILESTONES</div>
+        <div id="roadmap-milestones" class="space-y-4"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- â”€â”€ 3. INTERVIEW PREP â”€â”€ -->
+<section id="interview-section">
+  <div class="sec-label">Feature 03</div>
+  <h2 class="text-4xl font-black text-white mb-2">Interview Question Generator</h2>
+  <p class="text-slate-400 mb-8">Get 15 role-specific questions with answer frameworks and sample answers.</p>
+  <div class="card p-8 space-y-5">
+    <div class="grid md:grid-cols-2 gap-5">
+      <div>
+        <label class="block text-sm font-semibold text-slate-400 mb-2">Target Role</label>
+        <input id="iq-role" class="inp" placeholder="e.g. Frontend Developer..."/>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-400 mb-2">Seniority Level</label>
+        <select id="iq-level" class="inp">
+          <option>Entry-level</option><option selected>Mid-level</option>
+          <option>Senior</option><option>Lead/Manager</option>
+        </select>
+      </div>
+    </div>
+    <button onclick="generateQuestions()" class="btn w-full text-base">
+      <span id="iq-btn-text">&#9679; Generate Interview Questions</span>
+      <span id="iq-spinner" class="hidden">â³ Generating questions...</span>
+    </button>
+    <div id="iq-result" class="hidden fade-up space-y-4"></div>
+  </div>
+</section>
+
+<!-- â”€â”€ 3.5 SMART QUESTION GENERATOR â”€â”€ -->
+<section id="qgen-section">
+  <div class="sec-label">Feature 03B</div>
+  <h2 class="text-4xl font-black text-white mb-2">Smart Question Generator</h2>
+  <p class="text-slate-400 mb-8">Get role-specific technical, behavioral, and scenario questions tailored to your skills and experience level.</p>
+  <div class="card p-8 space-y-5">
+    <div class="grid md:grid-cols-3 gap-5">
+      <div>
+        <label class="block text-sm font-semibold text-slate-400 mb-2">Role</label>
+        <input id="qgen-role" class="inp" placeholder="e.g. Backend Developer"/>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-400 mb-2">Experience Level</label>
+        <select id="qgen-level" class="inp">
+          <option>Entry-level</option>
+          <option selected>Mid-level</option>
+          <option>Senior</option>
+          <option>Lead/Manager</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-400 mb-2">Key Skills</label>
+        <input id="qgen-skills" class="inp" placeholder="e.g. Python, Django, PostgreSQL"/>
+      </div>
+    </div>
+    <button onclick="generateSmartQuestions()" class="btn w-full text-base">
+      <span id="qgen-btn-text">&#127919; Generate Questions</span>
+      <span id="qgen-spinner" class="hidden">â³ Generating...</span>
+    </button>
+
+    <div id="qgen-result" class="hidden fade-up space-y-6">
+
+      <!-- Technical -->
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
+          <span class="text-sm font-bold text-indigo-400 uppercase tracking-wider">Technical Questions</span>
+          <span class="text-xs text-slate-500">(5)</span>
+        </div>
+        <div id="qgen-technical" class="space-y-3"></div>
+      </div>
+
+      <!-- Behavioral -->
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="w-3 h-3 rounded-full bg-green-500"></span>
+          <span class="text-sm font-bold text-green-400 uppercase tracking-wider">Behavioral Questions</span>
+          <span class="text-xs text-slate-500">(3)</span>
+        </div>
+        <div id="qgen-behavioral" class="space-y-3"></div>
+      </div>
+
+      <!-- Scenario -->
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+          <span class="text-sm font-bold text-yellow-400 uppercase tracking-wider">Real-World Scenarios</span>
+          <span class="text-xs text-slate-500">(2)</span>
+        </div>
+        <div id="qgen-scenario" class="space-y-3"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- â”€â”€ 4. COURSES â”€â”€ -->
+<section id="courses-section">
+  <div class="sec-label">Feature 04</div>
+  <h2 class="text-4xl font-black text-white mb-2">Course Recommendations</h2>
+  <p class="text-slate-400 mb-8">Get curated courses and certifications tailored to your skill gaps and target role.</p>
+  <div class="card p-8 space-y-5">
+    <div>
+      <label class="block text-sm font-semibold text-slate-400 mb-2">Target Role</label>
+      <input id="course-role" class="inp" placeholder="e.g. Data Scientist, Cloud Engineer..."/>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-slate-400 mb-2">Skill Gaps (comma separated)</label>
+      <input id="course-gaps" class="inp" placeholder="e.g. Python, Machine Learning, Docker..."/>
+    </div>
+    <button onclick="getCourses()" class="btn w-full text-base">
+      <span id="course-btn-text">&#9679; Get Course Recommendations</span>
+      <span id="course-spinner" class="hidden">â³ Finding courses...</span>
+    </button>
+    <div id="course-result" class="hidden fade-up grid md:grid-cols-2 gap-4"></div>
+  </div>
+</section>
+
+<!-- â”€â”€ 5. AI CHAT â”€â”€ -->
+<section id="chat-section">
+  <div class="sec-label">Feature 05</div>
+  <h2 class="text-4xl font-black text-white mb-2">AI Career Advisor Chat</h2>
+  <p class="text-slate-400 mb-8">Ask anything about your resume, career path, or interview prep. The AI remembers your context.</p>
+  <div class="card p-8 space-y-4">
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-semibold text-slate-400 mb-2">Target Role (context)</label>
+        <input id="chat-role" class="inp" placeholder="e.g. Backend Developer..."/>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-400 mb-2">Upload Resume (optional)</label>
+        <label for="chat-file" class="upload-zone block cursor-pointer py-3">
+          <input type="file" id="chat-file" accept=".pdf,.json,.png,.jpg" class="hidden" onchange="handleChatFile(event)"/>
+          <div id="chat-file-ph" class="text-sm text-slate-400">&#9679; Choose file for context</div>
+          <div id="chat-file-sel" class="hidden text-sm text-indigo-400 font-semibold"><span id="chat-file-name"></span></div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Chat window -->
+    <div class="rounded-2xl overflow-hidden border border-indigo-500/20">
+      <div class="flex items-center gap-3 px-5 py-3" style="background:linear-gradient(135deg,#1a1040,#0d1b3e);">
+        <div class="w-2.5 h-2.5 bg-green-400 rounded-full pulse-dot"></div>
+        <span class="text-white font-bold text-sm">CareerPilot AI Advisor</span>
+        <span class="text-indigo-400 text-xs ml-auto">Gemini 1.5 Flash</span>
+      </div>
+      <div id="chat-box" class="h-96 overflow-y-auto p-5 space-y-4" style="background:#0d0d1a;">
+        <div id="chat-placeholder" class="flex flex-col items-center justify-center h-full text-center">
+          <div class="text-5xl mb-4">🤖</div>
+          <div class="text-slate-400 font-semibold">Your AI Career Advisor is ready</div>
+          <div class="text-slate-500 text-sm mt-2">Ask me anything about your resume, career path, or interview prep</div>
+          <div class="flex flex-wrap gap-2 mt-4 justify-center">
+            <button onclick="quickChat('How can I improve my resume?')" class="btn btn-outline btn-sm">Improve my resume</button>
+            <button onclick="quickChat('What skills should I learn next?')" class="btn btn-outline btn-sm">Skills to learn</button>
+            <button onclick="quickChat('How do I negotiate salary?')" class="btn btn-outline btn-sm">Salary negotiation</button>
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-3 p-4 border-t border-white/5" style="background:#0d0d1a;">
+        <input id="chat-input" class="inp flex-1" placeholder="Ask anything about your career..." onkeydown="if(event.key==='Enter')sendChat()" style="background:#13131f;"/>
+        <button onclick="sendChat()" class="btn px-5 py-3 rounded-xl">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- â”€â”€ JOB FINDER â”€â”€ -->
+  <section id="jobs-section">
+    <div class="sec-label">Feature 06</div>
+    <h2 class="text-4xl font-black text-white mb-2">Job Finder</h2>
+    <p class="text-slate-400 mb-8">Search live job openings on LinkedIn, Indeed, Glassdoor and Naukri â€” for any tech role, including MNC-filtered results.</p>
+    <div class="card p-8 space-y-6">
+
+      <!-- Search bar -->
+      <div class="flex gap-3">
+        <input id="job-role-input" class="inp flex-1" placeholder="Enter any tech role e.g. Data Scientist, DevOps Engineer, Flutter Developer..."/>
+        <button onclick="findJobs()" class="btn px-8 whitespace-nowrap">&#9679; Find Jobs</button>
+      </div>
+
+      <!-- Quick role chips -->
+      <div>
+        <div class="text-xs text-slate-500 font-semibold mb-3 uppercase tracking-wider">Popular Tech Roles</div>
+        <div class="flex flex-wrap gap-2" id="role-chips"></div>
+      </div>
+
+      <!-- Results -->
+      <div id="job-results" class="hidden fade-up space-y-6">
+
+        <!-- Role title -->
+        <div class="flex items-center gap-3 p-4 rounded-2xl" style="background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(139,92,246,0.1));border:1px solid rgba(99,102,241,0.2);">
+          <span class="text-3xl">&#9679;</span>
+          <div>
+            <div id="job-role-title" class="text-white font-black text-xl"></div>
+            <div class="text-slate-400 text-sm">Click any link below to open job listings in a new tab</div>
+          </div>
+        </div>
+
+        <!-- General job boards -->
+        <div>
+          <div class="text-xs text-indigo-400 font-bold uppercase tracking-wider mb-3">&#9679; All Companies</div>
+          <div id="general-links" class="grid md:grid-cols-2 gap-3"></div>
+        </div>
+
+        <!-- MNC filtered -->
+        <div>
+          <div class="text-xs text-green-400 font-bold uppercase tracking-wider mb-3">&#9679; Top MNC Companies</div>
+          <div id="mnc-links" class="grid md:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+        </div>
+
+        <!-- India specific -->
+        <div>
+          <div class="text-xs text-yellow-400 font-bold uppercase tracking-wider mb-3">&#9679;‡³ India Job Portals</div>
+          <div id="india-links" class="grid md:grid-cols-2 gap-3"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- â•â•â• FOOTER â•â•â• -->
+<footer class="hero-bg border-t border-white/5 py-12 text-center">
+  <div class="text-4xl mb-3">🚀</div>
+  <div class="text-white font-black text-2xl">CareerPilot AI</div>
+  <div class="text-indigo-400 text-sm mt-2">Powered by Google Gemini · Built for Hackathon 2025</div>
+</footer>
+
+<script>
+const API = "http://127.0.0.1:5000";
+let chatHistory=[], chatFileText="", scoreFileObj=null, chatFileObj=null;
+
+// â”€â”€ Real-time background images (Picsum Photos) â”€â”€
+const PICSUM_IDS = [1015,1016,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030];
+let bgIdx = Math.floor(Math.random() * PICSUM_IDS.length);
+function loadBgImage() {
+  const el = document.getElementById("hero-bg-img");
+  const bg = document.getElementById("_bg");
+  if (!el && !bg) return;
+  const id = PICSUM_IDS[bgIdx % PICSUM_IDS.length];
+  const url = "https://picsum.photos/id/" + id + "/1600/900";
+  const img = new Image();
+  img.onload = () => {
+    if(el){ el.style.backgroundImage = "url('" + url + "')"; el.style.opacity = "0.22"; }
+    if(bg){ bg.style.backgroundImage = "url('" + url + "')"; bg.style.opacity = "0.18"; }
+  };
+  img.src = url;
+  bgIdx++;
+}
+loadBgImage();
+setInterval(()=>{
+  const el = document.getElementById("hero-bg-img");
+  const bg = document.getElementById("_bg");
+  if(el) el.style.opacity="0";
+  if(bg) bg.style.opacity="0";
+  setTimeout(loadBgImage, 2500);
+}, 18000);
+
+// â”€â”€ Particles â”€â”€
+(function(){
+  const c=document.getElementById('particles');
+  for(let i=0;i<18;i++){
+    const p=document.createElement('div');
+    const s=Math.random()*6+3;
+    p.className='particle';
+    p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;
+      background:${['#6366f1','#8b5cf6','#06b6d4','#a78bfa'][Math.floor(Math.random()*4)]};
+      animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*10}s;`;
+    c.appendChild(p);
+  }
+})();
+
+// â”€â”€ Helpers â”€â”€
+function spin(id,on){
+  const btn=document.getElementById(id+'-btn-text')||document.getElementById(id+'-text');
+  const sp=document.getElementById(id+'-spinner');
+  if(btn)btn.classList.toggle('hidden',on);
+  if(sp)sp.classList.toggle('hidden',!on);
+}
+function fmt(t){
+  return t
+    .replace(/\*\*(.*?)\*\*/g,'<strong class="text-indigo-300">$1</strong>')
+    .replace(/^### (.+)$/gm,'<div class="font-bold text-indigo-400 mt-3 mb-1 text-sm">$1</div>')
+    .replace(/^## (.+)$/gm,'<div class="font-bold text-white mt-3 mb-1">$1</div>')
+    .replace(/^# (.+)$/gm,'<div class="font-black text-white mt-4 mb-2 text-lg">$1</div>')
+    .replace(/^\* (.+)$/gm,'<div class="flex gap-2 my-0.5"><span class="text-indigo-400 mt-0.5">â€¢</span><span>$1</span></div>')
+    .replace(/^- (.+)$/gm,'<div class="flex gap-2 my-0.5"><span class="text-indigo-400 mt-0.5">â€¢</span><span>$1</span></div>')
+    .replace(/^(\d+)\. (.+)$/gm,'<div class="flex gap-2 my-0.5"><span class="text-purple-400 font-bold">$1.</span><span>$2</span></div>')
+    .replace(/\n/g,'<br/>');
+}
+function handleScoreFile(e){
+  scoreFileObj=e.target.files[0];
+  if(!scoreFileObj)return;
+  document.getElementById('score-file-ph').classList.add('hidden');
+  document.getElementById('score-file-sel').classList.remove('hidden');
+  document.getElementById('score-file-name').textContent=scoreFileObj.name;
+}
+function handleChatFile(e){
+  chatFileObj=e.target.files[0];
+  if(!chatFileObj)return;
+  document.getElementById('chat-file-ph').classList.add('hidden');
+  document.getElementById('chat-file-sel').classList.remove('hidden');
+  document.getElementById('chat-file-name').textContent=chatFileObj.name;
+}
+function setRoadmapRole(r){document.getElementById('roadmap-role').value=r;}
+
+// â”€â”€ 1. Score â”€â”€
+async function scoreResume(){
+  const role=document.getElementById('score-role').value.trim()||'Software Developer';
+  const resume=document.getElementById('score-resume').value.trim();
+  if(!resume&&!scoreFileObj)return alert('Please upload a resume or paste text.');
+  spin('score',true);
+  document.getElementById('score-result').classList.add('hidden');
+  try{
+    const form=new FormData();
+    form.append('target_role',role);
+    if(scoreFileObj)form.append('file',scoreFileObj);
+    else form.append('resume',resume);
+    const res=await fetch(`${API}/score`,{method:'POST',body:form});
+    const d=await res.json();
+    if(d.error)throw new Error(d.error);
+    renderScore(d);
+  }catch(e){alert('Error: '+e.message);}
+  finally{spin('score',false);}
+}
+function renderScore(d){
+  const el=document.getElementById('score-result');
+  el.classList.remove('hidden');
+  // Animate ring
+  const pct=d.total_score/100;
+  const circ=364;
+  const offset=circ-(circ*pct);
+  setTimeout(()=>{
+    document.getElementById('score-circle').style.strokeDashoffset=offset;
+    document.getElementById('score-circle').style.transition='stroke-dashoffset 1.5s ease';
+  },100);
+  // Animate number
+  let n=0;const target=d.total_score;
+  const iv=setInterval(()=>{n=Math.min(n+2,target);document.getElementById('score-num').textContent=n;if(n>=target)clearInterval(iv);},20);
+  document.getElementById('score-summary').textContent=d.summary||'';
+  document.getElementById('score-strengths').innerHTML=(d.top_strengths||[]).map(s=>`<div class="flex gap-1"><span class="text-green-400">âœ“</span>${s}</div>`).join('');
+  document.getElementById('score-gaps').innerHTML=(d.critical_gaps||[]).map(g=>`<div class="flex gap-1"><span class="text-red-400">âœ—</span>${g}</div>`).join('');
+  const cats={keywords:'&#9679; Keywords',experience:'&#9679; Experience',education:'&#9679; Education',skills:'âš¡ Skills',formatting:'&#9679; Formatting',achievements:'&#9679; Achievements'};
+  document.getElementById('score-breakdown').innerHTML=Object.entries(d.breakdown||{}).map(([k,v])=>`
+    <div class="card p-4">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-sm font-semibold text-slate-300">${cats[k]||k}</span>
+        <span class="text-indigo-400 font-bold text-sm">${v.score}/${v.max}</span>
+      </div>
+      <div class="prog-bar mb-2"><div class="prog-fill" style="width:${(v.score/v.max)*100}%"></div></div>
+      <div class="text-xs text-slate-500">${v.feedback}</div>
+    </div>`).join('');
+}
+
+// â”€â”€ 2. Roadmap â”€â”€
+async function generateRoadmap(){
+  const current=document.getElementById('current-role').value.trim();
+  const target=document.getElementById('roadmap-role').value.trim();
+  if(!target)return alert('Please enter a target role.');
+  spin('roadmap',true);
+  document.getElementById('roadmap-result').classList.add('hidden');
+  try{
+    const res=await fetch(`${API}/roadmap`,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({current_role:current,target_role:target})});
+    const d=await res.json();
+    if(d.error)throw new Error(d.error);
+    document.getElementById('roadmap-gaps').innerHTML=(d.skill_gaps||[]).map(g=>`
+      <div class="flex items-center gap-2 text-sm text-slate-300"><span class="w-2 h-2 bg-red-400 rounded-full flex-shrink-0"></span>${g}</div>`).join('');
+    document.getElementById('roadmap-actions').innerHTML=(d.immediate_actions||[]).map(a=>`
+      <div class="flex items-start gap-2 text-sm text-slate-300"><span class="text-green-400 mt-0.5">â†’</span>${a}</div>`).join('');
+    document.getElementById('roadmap-milestones').innerHTML=(d.milestones||[]).map((m,i)=>`
+      <div class="milestone">
+        <div class="milestone-dot">${i+1}</div>
+        <div class="card p-4">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-xs font-bold text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded-lg">${m.month}</span>
+            <span class="font-bold text-white text-sm">${m.title}</span>
+          </div>
+          <div class="space-y-1 mb-2">${(m.tasks||[]).map(t=>`<div class="text-xs text-slate-400 flex gap-1"><span class="text-purple-400">â€¢</span>${t}</div>`).join('')}</div>
+          <div class="text-xs text-green-400 font-semibold">âœ“ ${m.outcome}</div>
+        </div>
+      </div>`).join('');
+    document.getElementById('roadmap-result').classList.remove('hidden');
+  }catch(e){alert('Error: '+e.message);}
+  finally{spin('roadmap',false);}
+}
+
+// â”€â”€ 3. Interview Questions â”€â”€
+async function generateQuestions(){
+  const role=document.getElementById('iq-role').value.trim();
+  const level=document.getElementById('iq-level').value;
+  if(!role)return alert('Please enter a target role.');
+  spin('iq',true);
+  document.getElementById('iq-result').classList.add('hidden');
+  try{
+    const res=await fetch(`${API}/interview-questions`,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({target_role:role,level})});
+    const d=await res.json();
+    if(d.error)throw new Error(d.error);
+    const typeColor={Technical:'badge-tech',Behavioral:'badge-beh',Situational:'badge-sit'};
+    document.getElementById('iq-result').innerHTML=(d.questions||[]).map(q=>`
+      <div class="card p-5 space-y-3">
+        <div class="flex items-start gap-3">
+          <span class="text-indigo-400 font-black text-lg w-8 flex-shrink-0">${q.id}.</span>
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="badge ${typeColor[q.type]||'badge-tech'}">${q.type}</span>
+            </div>
+            <div class="text-white font-semibold text-sm mb-3">${q.question}</div>
+            <details class="group">
+              <summary class="text-xs text-indigo-400 cursor-pointer font-semibold hover:text-indigo-300">&#9679; View Answer Framework</summary>
+              <div class="mt-3 space-y-2">
+                <div class="text-xs text-slate-400 bg-indigo-500/5 border border-indigo-500/20 rounded-lg p-3"><strong class="text-indigo-400">Framework:</strong> ${q.framework}</div>
+                <div class="text-xs text-slate-400 bg-purple-500/5 border border-purple-500/20 rounded-lg p-3"><strong class="text-purple-400">Sample Answer:</strong> ${q.sample_answer}</div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>`).join('');
+    document.getElementById('iq-result').classList.remove('hidden');
+  }catch(e){alert('Error: '+e.message);}
+  finally{spin('iq',false);}
+}
+
+// â”€â”€ 4. Courses â”€â”€
+// â”€â”€ Smart Question Generator â”€â”€
+async function generateSmartQuestions(){
+  const role   = document.getElementById('qgen-role').value.trim();
+  const level  = document.getElementById('qgen-level').value;
+  const skills = document.getElementById('qgen-skills').value.trim();
+  if(!role) return alert('Please enter a role.');
+  spin('qgen', true);
+  document.getElementById('qgen-result').classList.add('hidden');
+  try{
+    const res = await fetch(`${API}/generate-questions`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({role, level, skills})
+    });
+    const d = await res.json();
+    if(d.error) throw new Error(d.error);
+    const diffColor = {Easy:'text-green-400', Medium:'text-yellow-400', Hard:'text-red-400'};
+    document.getElementById('qgen-technical').innerHTML = (d.technical||[]).map((q,i)=>`
+      <div class="card p-4">
+        <div class="flex items-start gap-3">
+          <span class="text-indigo-400 font-black w-6 flex-shrink-0">${i+1}.</span>
+          <div class="flex-1">
+            <span class="text-xs font-bold ${diffColor[q.difficulty]||'text-slate-400'}">${q.difficulty||'Medium'}</span>
+            <div class="text-white text-sm font-medium my-1">${q.question}</div>
+            <details><summary class="text-xs text-indigo-400 cursor-pointer font-semibold">&#9679; What to look for</summary>
+            <div class="mt-2 text-xs text-slate-400 bg-indigo-500/5 border border-indigo-500/15 rounded-lg p-3">${q.hint}</div></details>
+          </div>
+        </div>
+      </div>`).join('');
+    document.getElementById('qgen-behavioral').innerHTML = (d.behavioral||[]).map((q,i)=>`
+      <div class="card p-4">
+        <div class="flex items-start gap-3">
+          <span class="text-green-400 font-black w-6 flex-shrink-0">${i+1}.</span>
+          <div class="flex-1">
+            <span class="text-xs font-bold text-green-400 bg-green-500/10 px-2 py-0.5 rounded">${q.framework||'STAR'}</span>
+            <div class="text-white text-sm font-medium my-1">${q.question}</div>
+            <details><summary class="text-xs text-green-400 cursor-pointer font-semibold">&#9679; What to look for</summary>
+            <div class="mt-2 text-xs text-slate-400 bg-green-500/5 border border-green-500/15 rounded-lg p-3">${q.hint}</div></details>
+          </div>
+        </div>
+      </div>`).join('');
+    document.getElementById('qgen-scenario').innerHTML = (d.scenario||[]).map((q,i)=>`
+      <div class="card p-4">
+        <div class="flex items-start gap-3">
+          <span class="text-yellow-400 font-black w-6 flex-shrink-0">${i+1}.</span>
+          <div class="flex-1">
+            <div class="text-xs text-yellow-400 font-semibold mb-1">&#9679; ${q.context||'Real-world scenario'}</div>
+            <div class="text-white text-sm font-medium mb-1">${q.question}</div>
+            <details><summary class="text-xs text-yellow-400 cursor-pointer font-semibold">&#9679; Expected approach</summary>
+            <div class="mt-2 text-xs text-slate-400 bg-yellow-500/5 border border-yellow-500/15 rounded-lg p-3">${q.hint}</div></details>
+          </div>
+        </div>
+      </div>`).join('');
+    document.getElementById('qgen-result').classList.remove('hidden');
+  }catch(e){ alert('Error: '+e.message); }
+  finally{ spin('qgen', false); }
+}
+
+async function getCourses(){
+  const role=document.getElementById('course-role').value.trim();
+  const gaps=document.getElementById('course-gaps').value.trim().split(',').map(s=>s.trim()).filter(Boolean);
+  if(!role)return alert('Please enter a target role.');
+  spin('course',true);
+  document.getElementById('course-result').classList.add('hidden');
+  try{
+    const res=await fetch(`${API}/courses`,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({target_role:role,skill_gaps:gaps})});
+    const d=await res.json();
+    if(d.error)throw new Error(d.error);
+    const priColor={High:'text-red-400',Medium:'text-yellow-400',Low:'text-green-400'};
+    const lvlColor={Beginner:'text-green-400',Intermediate:'text-yellow-400',Advanced:'text-red-400'};
+    document.getElementById('course-result').innerHTML=(d.courses||[]).map(c=>`
+      <div class="card p-5 space-y-3">
+        <div class="flex items-start justify-between gap-2">
+          <div class="font-bold text-white text-sm leading-tight">${c.title}</div>
+          <span class="text-xs font-bold ${priColor[c.priority]||'text-slate-400'} flex-shrink-0">${c.priority}</span>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="badge badge-tech text-xs">${c.platform}</span>
+          <span class="text-xs ${lvlColor[c.level]||'text-slate-400'} font-semibold">${c.level}</span>
+          <span class="text-xs text-slate-500">â± ${c.duration}</span>
+        </div>
+        <div class="text-xs text-slate-400">Covers: <span class="text-indigo-400">${c.skill}</span></div>
+        <div class="text-xs text-slate-500 italic">Search: "${c.url_hint}"</div>
+      </div>`).join('');
+    document.getElementById('course-result').classList.remove('hidden');
+  }catch(e){alert('Error: '+e.message);}
+  finally{spin('course',false);}
+}
+
+// â”€â”€ 5. Chat â”€â”€
+function quickChat(msg){
+  document.getElementById('chat-input').value=msg;
+  sendChat();
+}
+async function sendChat(){
+  const input=document.getElementById('chat-input');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  const role=document.getElementById('chat-role').value.trim();
+  document.getElementById('chat-placeholder')?.remove();
+  addBubble('user',text);
+  chatHistory.push({role:'user',content:text});
+  addBubble('ai','â³ Thinking...',true);
+  try{
+    const res=await fetch(`${API}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:chatHistory,target_role:role,resume_context:chatFileText})});
+    const d=await res.json();
+    if(d.error)throw new Error(d.error);
+    chatHistory.push({role:'assistant',content:d.result});
+    removeTyping();addBubble('ai',d.result);
+  }catch(e){removeTyping();addBubble('ai','âš ï¸ '+e.message);}
+}
+function addBubble(role,text,isTyping=false){
+  const box=document.getElementById('chat-box');
+  const w=document.createElement('div');
+  w.className=`flex ${role==='user'?'justify-end':'justify-start'} fade-up`;
+  if(isTyping)w.id='typing-ind';
+  const b=document.createElement('div');
+  b.className=role==='user'?'chat-user':'chat-ai';
+  b.innerHTML=role==='user'?text:fmt(text);
+  w.appendChild(b);box.appendChild(w);
+  box.scrollTop=box.scrollHeight;
+}
+// â”€â”€ Job Finder â”€â”€
+const TECH_ROLES = [
+  "Software Developer","Frontend Developer","Backend Developer","Full Stack Developer",
+  "Data Scientist","Data Analyst","Data Engineer","ML Engineer","AI Engineer",
+  "DevOps Engineer","Cloud Engineer","AWS Engineer","Azure Engineer","GCP Engineer",
+  "Cybersecurity Analyst","Security Engineer","Penetration Tester",
+  "Mobile Developer","Android Developer","iOS Developer","Flutter Developer","React Native Developer",
+  "UI/UX Designer","Product Manager","Scrum Master","QA Engineer","Test Automation Engineer",
+  "Blockchain Developer","Game Developer","Embedded Systems Engineer",
+  "Site Reliability Engineer","Platform Engineer","Database Administrator",
+  "Python Developer","Java Developer","Node.js Developer","React Developer","Angular Developer"
+];
+
+const MNCS = [
+  {name:"Google",    id:"1441"},
+  {name:"Microsoft", id:"1035"},
+  {name:"Amazon",    id:"1586"},
+  {name:"Meta",      id:"10667"},
+  {name:"Apple",     id:"162479"},
+  {name:"Netflix",   id:"165158"},
+  {name:"IBM",       id:"1009"},
+  {name:"Infosys",   id:"1283"},
+  {name:"TCS",       id:"13796"},
+  {name:"Wipro",     id:"11544"},
+  {name:"Accenture", id:"1033"},
+  {name:"Cognizant", id:"1680"},
+  {name:"Capgemini", id:"2142"},
+  {name:"HCL",       id:"4323"},
+  {name:"Deloitte",  id:"1038"},
+  {name:"Oracle",    id:"1067"},
+  {name:"SAP",       id:"10156"},
+  {name:"Salesforce",id:"2101"},
+];
+
+// Render role chips
+(function renderChips(){
+  const container = document.getElementById("role-chips");
+  TECH_ROLES.forEach(role => {
+    const btn = document.createElement("button");
+    btn.className = "tag text-xs";
+    btn.textContent = role;
+    btn.onclick = () => {
+      document.getElementById("job-role-input").value = role;
+      findJobs();
+    };
+    container.appendChild(btn);
+  });
+})();
+
+function findJobs() {
+  const role = document.getElementById("job-role-input").value.trim();
+  if (!role) return alert("Please enter a job role.");
+  const enc = encodeURIComponent(role);
+
+  document.getElementById("job-role-title").textContent = role + " Jobs";
+  document.getElementById("job-results").classList.remove("hidden");
+
+  // â”€â”€ General links â”€â”€
+  const general = [
+    {
+      icon:"&#9679;", name:"LinkedIn Jobs",
+      color:"from-blue-600 to-blue-700",
+      url:`https://www.linkedin.com/jobs/search/?keywords=${enc}&f_WT=2,1,3`,
+      desc:"All companies · Remote & On-site"
+    },
+    {
+      icon:"&#9679;", name:"Indeed",
+      color:"from-indigo-600 to-indigo-700",
+      url:`https://www.indeed.com/jobs?q=${enc}&sort=date`,
+      desc:"Latest postings · All locations"
+    },
+    {
+      icon:"&#9679;", name:"Glassdoor",
+      color:"from-green-600 to-green-700",
+      url:`https://www.glassdoor.com/Job/jobs.htm?sc.keyword=${enc}&sortBy=date_desc`,
+      desc:"With salary & reviews"
+    },
+    {
+      icon:"&#9679;", name:"We Work Remotely",
+      color:"from-purple-600 to-purple-700",
+      url:`https://weworkremotely.com/remote-jobs/search?term=${enc}`,
+      desc:"100% Remote jobs only"
+    },
+  ];
+
+  document.getElementById("general-links").innerHTML = general.map(j => `
+    <a href="${j.url}" target="_blank" rel="noopener"
+      class="flex items-center gap-3 p-4 rounded-xl border border-white/10 hover:border-indigo-500/50 transition-all group"
+      style="background:rgba(255,255,255,0.03);">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br ${j.color} flex items-center justify-center text-lg flex-shrink-0">${j.icon}</div>
+      <div class="flex-1 min-w-0">
+        <div class="text-white font-semibold text-sm group-hover:text-indigo-300 transition">${j.name}</div>
+        <div class="text-slate-500 text-xs">${j.desc}</div>
+      </div>
+      <span class="text-slate-600 group-hover:text-indigo-400 transition text-lg">â†’</span>
+    </a>`).join("");
+
+  // â”€â”€ MNC links â”€â”€
+  document.getElementById("mnc-links").innerHTML = MNCS.map(c => `
+    <a href="https://www.linkedin.com/jobs/search/?keywords=${enc}&f_C=${c.id}" target="_blank" rel="noopener"
+      class="flex items-center gap-3 p-3 rounded-xl border border-white/10 hover:border-green-500/40 transition-all group"
+      style="background:rgba(255,255,255,0.03);">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">${c.name[0]}</div>
+      <div class="flex-1 min-w-0">
+        <div class="text-white font-semibold text-sm group-hover:text-green-300 transition truncate">${c.name}</div>
+        <div class="text-slate-500 text-xs">LinkedIn Jobs</div>
+      </div>
+      <span class="text-slate-600 group-hover:text-green-400 transition">&#x2197;</span>
+    </a>`).join("");
+
+  // â”€â”€ India portals â”€â”€
+  const india = [
+    {
+      icon:"&#9679;‡³", name:"Naukri.com",
+      color:"from-orange-600 to-red-600",
+      url:`https://www.naukri.com/${enc.toLowerCase().replace(/%20/g,"-")}-jobs`,
+      desc:"India's #1 job portal"
+    },
+    {
+      icon:"&#9679;", name:"LinkedIn India",
+      color:"from-blue-700 to-blue-800",
+      url:`https://www.linkedin.com/jobs/search/?keywords=${enc}&location=India`,
+      desc:"India · All experience levels"
+    },
+    {
+      icon:"&#9679;", name:"Internshala",
+      color:"from-teal-600 to-cyan-600",
+      url:`https://internshala.com/jobs/${enc.toLowerCase().replace(/%20/g,"-")}-jobs`,
+      desc:"Jobs + Internships · Freshers"
+    },
+    {
+      icon:"âš¡", name:"AngelList / Wellfound",
+      color:"from-pink-600 to-rose-600",
+      url:`https://wellfound.com/jobs?q=${enc}&l=India`,
+      desc:"Startups & funded companies"
+    },
+  ];
+
+  document.getElementById("india-links").innerHTML = india.map(j => `
+    <a href="${j.url}" target="_blank" rel="noopener"
+      class="flex items-center gap-3 p-4 rounded-xl border border-white/10 hover:border-yellow-500/40 transition-all group"
+      style="background:rgba(255,255,255,0.03);">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br ${j.color} flex items-center justify-center text-lg flex-shrink-0">${j.icon}</div>
+      <div class="flex-1 min-w-0">
+        <div class="text-white font-semibold text-sm group-hover:text-yellow-300 transition">${j.name}</div>
+        <div class="text-slate-500 text-xs">${j.desc}</div>
+      </div>
+      <span class="text-slate-600 group-hover:text-yellow-400 transition text-lg">â†’</span>
+    </a>`).join("");
+
+  // Scroll to results
+  document.getElementById("job-results").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function removeTyping(){const e=document.getElementById('typing-ind');if(e)e.remove();}
+</script>
+<!-- â•â•â• FLOATING CHAT WIDGET â•â•â• -->
+<div id="chat-widget" style="position:fixed;bottom:24px;right:24px;z-index:1000;">
+  <!-- Toggle button -->
+  <button id="chat-fab" onclick="toggleWidget()"
+    style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);
+    border:none;cursor:pointer;box-shadow:0 8px 32px rgba(99,102,241,0.5);
+    display:flex;align-items:center;justify-content:center;font-size:24px;transition:all 0.3s;">
+    &#9679;
+  </button>
+  <!-- Chat panel -->
+  <div id="widget-panel" style="display:none;position:absolute;bottom:72px;right:0;
+    width:360px;height:500px;background:#13131f;border:1px solid rgba(99,102,241,0.3);
+    border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.5);overflow:hidden;flex-direction:column;">
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#1a1040,#0d1b3e);padding:14px 16px;
+      display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.05);">
+      <div style="width:8px;height:8px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite;"></div>
+      <span style="color:white;font-weight:700;font-size:14px;">CareerPilot AI</span>
+      <span style="color:#6366f1;font-size:11px;margin-left:4px;">· Ask me anything</span>
+      <button onclick="toggleWidget()" style="margin-left:auto;background:none;border:none;color:#6b7280;cursor:pointer;font-size:18px;line-height:1;">Ã—</button>
+    </div>
+    <!-- Messages -->
+    <div id="widget-messages" style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:#2d2d4e transparent;">
+      <div style="background:#1e1e2e;border:1px solid rgba(99,102,241,0.15);border-radius:14px 14px 14px 4px;padding:12px 14px;font-size:13px;color:#e2e8f0;line-height:1.6;">
+        &#9679; Hi! I'm CareerPilot AI. Ask me about any job role, career advice, resume tips, or interview prep!
+      </div>
+    </div>
+    <!-- Input -->
+    <div style="padding:12px;border-top:1px solid rgba(255,255,255,0.05);display:flex;gap:8px;">
+      <input id="widget-input" placeholder="Ask anything..."
+        style="flex:1;background:#1e1e2e;border:2px solid rgba(99,102,241,0.2);border-radius:10px;
+        padding:10px 14px;color:#e2e8f0;font-size:13px;outline:none;"
+        onkeydown="if(event.key==='Enter')widgetSend()"
+        onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='rgba(99,102,241,0.2)'"/>
+      <button onclick="widgetSend()"
+        style="background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:10px;
+        width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+        <svg width="16" height="16" fill="none" stroke="white" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
+#widget-messages::-webkit-scrollbar{width:3px;}
+#widget-messages::-webkit-scrollbar-thumb{background:#2d2d4e;border-radius:3px;}
+</style>
+
+<script>
+const WIDGET_API = "http://127.0.0.1:5000";
+let widgetHistory = [];
+let widgetOpen = false;
+
+function toggleWidget() {
+  widgetOpen = !widgetOpen;
+  const panel = document.getElementById("widget-panel");
+  const fab   = document.getElementById("chat-fab");
+  panel.style.display = widgetOpen ? "flex" : "none";
+  panel.style.flexDirection = "column";
+  fab.style.transform = widgetOpen ? "scale(0.9)" : "scale(1)";
+  fab.textContent = widgetOpen ? "âœ•" : "&#9679;";
+  if (widgetOpen) document.getElementById("widget-input").focus();
+}
+
+async function widgetSend() {
+  const input = document.getElementById("widget-input");
+  const text  = input.value.trim();
+  if (!text) return;
+  input.value = "";
+
+  addWidgetBubble("user", text);
+  widgetHistory.push({role:"user", content:text});
+  addWidgetBubble("ai", "â³ Thinking...", true);
+
+  try {
+    const res  = await fetch(`${WIDGET_API}/chat`, {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({messages: widgetHistory})
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    widgetHistory.push({role:"assistant", content:data.result});
+    removeWidgetTyping();
+    addWidgetBubble("ai", data.result);
+  } catch(e) {
+    removeWidgetTyping();
+    addWidgetBubble("ai", "âš ï¸ " + e.message);
+  }
+}
+
+function addWidgetBubble(role, text, isTyping=false) {
+  const box = document.getElementById("widget-messages");
+  const div = document.createElement("div");
+  if (isTyping) div.id = "widget-typing";
+
+  const isUser = role === "user";
+  div.style.cssText = `
+    padding:10px 14px;border-radius:${isUser?"14px 14px 4px 14px":"14px 14px 14px 4px"};
+    font-size:13px;line-height:1.6;max-width:88%;word-break:break-word;
+    ${isUser
+      ? "background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;align-self:flex-end;margin-left:auto;"
+      : "background:#1e1e2e;border:1px solid rgba(99,102,241,0.15);color:#e2e8f0;"}
+  `;
+  div.innerHTML = text.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br/>");
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function removeWidgetTyping() {
+  document.getElementById("widget-typing")?.remove();
+}
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

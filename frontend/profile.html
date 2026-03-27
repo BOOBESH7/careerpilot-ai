@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>My Profile — CareerPilot AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{font-family:"Inter",sans-serif;box-sizing:border-box;}
+body{background:#0a0a0f;color:#e2e8f0;min-height:100vh;background-image:url("https://picsum.photos/id/1018/1600/900");background-size:cover;background-position:center;background-attachment:fixed;}
+.overlay{position:fixed;inset:0;background:rgba(10,10,15,0.82);z-index:0;pointer-events:none;}
+.card{background:#13131f;border:1px solid rgba(99,102,241,0.15);border-radius:20px;}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;}
+.score-high{background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3);}
+.score-mid{background:rgba(245,158,11,0.15);color:#fcd34d;border:1px solid rgba(245,158,11,0.3);}
+.score-low{background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);}
+.prog-bar{height:6px;background:#1e1e2e;border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#6366f1,#8b5cf6);}
+.tab{padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;color:#6b7280;border:none;background:transparent;transition:all 0.2s;}
+.tab.active{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;}
+.empty{text-align:center;padding:40px;color:#4b5563;}
+</style>
+</head>
+<body>
+<div class="overlay"></div>
+
+<nav style="position:sticky;top:0;z-index:99999;background:linear-gradient(135deg,rgba(15,12,41,0.97),rgba(48,43,99,0.97));backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08);">
+  <div style="max-width:1280px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;">
+      <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:18px;">🚀</div>
+      <div><div style="color:white;font-weight:900;font-size:15px;line-height:1;">CareerPilot</div><div style="color:#818cf8;font-size:11px;font-weight:600;">AI</div></div>
+    </a>
+    <div style="display:flex;align-items:center;gap:2px;">
+      <a href="/" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Home</a>
+      <a href="/resume.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Resume</a>
+      <a href="/roadmap.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Roadmap</a>
+      <a href="/jobs.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">Jobs</a>
+      <a href="/chat.html" style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;padding:7px 11px;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,0.7)'">AI Chat</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <div id="user-bar" style="display:none;align-items:center;gap:8px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);border-radius:10px;padding:6px 12px;">
+        <img id="user-bar-avatar" style="width:24px;height:24px;border-radius:50%;object-fit:cover;display:none;" src=""/>
+        <span style="font-size:15px;">👤</span>
+        <span id="user-bar-name" style="color:#a5b4fc;font-size:13px;font-weight:600;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+        <button onclick="fbSignOut()" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#fca5a5;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;cursor:pointer;">Sign Out</button>
+      </div>
+      <a id="nav-login-btn" href="/login.html" style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:white;font-weight:600;font-size:13px;text-decoration:none;padding:7px 14px;border-radius:10px;">🔑 Sign In</a>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-4xl mx-auto px-4 py-10" style="position:relative;z-index:1;">
+
+  <!-- Not logged in state -->
+  <div id="not-logged-in" style="display:none;" class="text-center py-20">
+    <div style="font-size:64px;margin-bottom:16px;">🔒</div>
+    <h2 class="text-2xl font-black text-white mb-3">Sign in to view your profile</h2>
+    <p class="text-slate-400 mb-6">Your scores, roadmaps and history are saved per account.</p>
+    <a href="/login.html" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;font-weight:700;padding:12px 28px;border-radius:12px;text-decoration:none;font-size:15px;">🔑 Sign In</a>
+  </div>
+
+  <!-- Profile content -->
+  <div id="profile-content" style="display:none;">
+
+    <!-- User card -->
+    <div class="card p-6 mb-8 flex flex-col md:flex-row items-center gap-6">
+      <div id="avatar-wrap" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;">👤</div>
+      <div class="flex-1 text-center md:text-left">
+        <h1 id="profile-name" class="text-3xl font-black text-white"></h1>
+        <p id="profile-email" class="text-slate-400 text-sm mt-1"></p>
+        <div class="flex flex-wrap gap-3 mt-3 justify-center md:justify-start">
+          <div class="badge" style="background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(99,102,241,0.3);">
+            <span>📄</span><span id="score-count">0 Scores</span>
+          </div>
+          <div class="badge" style="background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3);">
+            <span>🗺️</span><span id="roadmap-count">0 Roadmaps</span>
+          </div>
+          <div class="badge" style="background:rgba(245,158,11,0.15);color:#fcd34d;border:1px solid rgba(245,158,11,0.3);">
+            <span>📅</span><span id="member-since">Member</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div style="display:flex;gap:8px;margin-bottom:20px;background:#13131f;border-radius:14px;padding:6px;border:1px solid rgba(99,102,241,0.15);">
+      <button class="tab active" id="tab-scores" onclick="showTab('scores')">📄 Resume Scores</button>
+      <button class="tab" id="tab-roadmaps" onclick="showTab('roadmaps')">🗺️ Roadmaps</button>
+    </div>
+
+    <!-- Scores tab -->
+    <div id="tab-scores-content">
+      <div id="scores-loading" class="empty">⏳ Loading your scores...</div>
+      <div id="scores-list" class="space-y-4" style="display:none;"></div>
+      <div id="scores-empty" class="empty" style="display:none;">
+        <div style="font-size:48px;margin-bottom:12px;">📄</div>
+        <p class="text-slate-400">No resume scores yet.</p>
+        <a href="/resume.html" style="color:#6366f1;font-weight:600;text-decoration:none;">Analyze your resume →</a>
+      </div>
+    </div>
+
+    <!-- Roadmaps tab -->
+    <div id="tab-roadmaps-content" style="display:none;">
+      <div id="roadmaps-loading" class="empty">⏳ Loading your roadmaps...</div>
+      <div id="roadmaps-list" class="space-y-4" style="display:none;"></div>
+      <div id="roadmaps-empty" class="empty" style="display:none;">
+        <div style="font-size:48px;margin-bottom:12px;">🗺️</div>
+        <p class="text-slate-400">No roadmaps generated yet.</p>
+        <a href="/roadmap.html" style="color:#6366f1;font-weight:600;text-decoration:none;">Generate a roadmap →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import{getFirestore,collection,getDocs,orderBy,query}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const app=initializeApp({apiKey:"AIzaSyAAQ4YStcuTEp4E4qQoA3Sfms4UGyJyjbY",authDomain:"resume-analyzer-com.firebaseapp.com",projectId:"resume-analyzer-com",storageBucket:"resume-analyzer-com.firebasestorage.app",messagingSenderId:"1065048610992",appId:"1:1065048610992:web:3de45568615994b048c375"});
+const auth=getAuth(app), db=getFirestore(app);
+
+window._fbApp=app; window._fbAuth=auth;
+window.fbSignOut=async()=>{await signOut(auth);window.location.href="/login.html";};
+
+onAuthStateChanged(auth, async user=>{
+  // Update nav
+  const bar=document.getElementById("user-bar");
+  const loginBtn=document.getElementById("nav-login-btn");
+  const nameEl=document.getElementById("user-bar-name");
+  const avatarEl=document.getElementById("user-bar-avatar");
+  if(user){
+    bar.style.display="flex"; loginBtn.style.display="none";
+    if(nameEl) nameEl.textContent=user.displayName||user.email.split("@")[0];
+    if(avatarEl&&user.photoURL){avatarEl.src=user.photoURL;avatarEl.style.display="block";}
+  }
+
+  if(!user){
+    document.getElementById("not-logged-in").style.display="block";
+    return;
+  }
+
+  document.getElementById("profile-content").style.display="block";
+
+  // Fill profile card
+  document.getElementById("profile-name").textContent=user.displayName||"User";
+  document.getElementById("profile-email").textContent=user.email;
+  if(user.photoURL){
+    const av=document.getElementById("avatar-wrap");
+    av.innerHTML=`<img src="${user.photoURL}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;"/>`;
+  }
+  const since=user.metadata.creationTime?new Date(user.metadata.creationTime).toLocaleDateString("en-US",{month:"short",year:"numeric"}):"";
+  document.getElementById("member-since").textContent="Since "+since;
+
+  // Load scores
+  try{
+    const sq=query(collection(db,"users",user.uid,"scores"),orderBy("createdAt","desc"));
+    const snap=await getDocs(sq);
+    document.getElementById("score-count").textContent=snap.size+" Score"+(snap.size!==1?"s":"");
+    document.getElementById("scores-loading").style.display="none";
+    if(snap.empty){document.getElementById("scores-empty").style.display="block";}
+    else{
+      document.getElementById("scores-list").style.display="block";
+      document.getElementById("scores-list").innerHTML=snap.docs.map(d=>{
+        const s=d.data();
+        const sc=s.score||0;
+        const cls=sc>=70?"score-high":sc>=50?"score-mid":"score-low";
+        const date=s.createdAt?.toDate?s.createdAt.toDate().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}):"";
+        return `<div class="card p-5">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+            <div>
+              <div style="font-weight:800;color:white;font-size:16px;">${s.role||"Resume Analysis"}</div>
+              <div style="color:#6b7280;font-size:12px;margin-top:2px;">${date}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span class="badge ${cls}" style="font-size:14px;padding:6px 14px;">${sc}/100</span>
+            </div>
+          </div>
+          <div class="prog-bar mb-3"><div class="prog-fill" style="width:${sc}%"></div></div>
+          <p style="color:#94a3b8;font-size:13px;line-height:1.6;">${s.summary||""}</p>
+          ${s.gaps?.length?`<div style="margin-top:10px;"><div style="font-size:11px;font-weight:700;color:#f87171;margin-bottom:6px;">⚠️ GAPS</div><div style="display:flex;flex-wrap:wrap;gap:6px;">${s.gaps.map(g=>`<span style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#fca5a5;font-size:11px;padding:3px 10px;border-radius:20px;">${g}</span>`).join("")}</div></div>`:""}
+        </div>`;
+      }).join("");
+    }
+  }catch(e){document.getElementById("scores-loading").textContent="Could not load scores.";}
+
+  // Load roadmaps
+  try{
+    const rq=query(collection(db,"users",user.uid,"roadmaps"),orderBy("createdAt","desc"));
+    const rsnap=await getDocs(rq);
+    document.getElementById("roadmap-count").textContent=rsnap.size+" Roadmap"+(rsnap.size!==1?"s":"");
+    document.getElementById("roadmaps-loading").style.display="none";
+    if(rsnap.empty){document.getElementById("roadmaps-empty").style.display="block";}
+    else{
+      document.getElementById("roadmaps-list").style.display="block";
+      document.getElementById("roadmaps-list").innerHTML=rsnap.docs.map(d=>{
+        const r=d.data();
+        const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}):"";
+        return `<div class="card p-5">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+            <div>
+              <div style="font-weight:800;color:white;font-size:16px;">${r.currentRole||"?"} → ${r.targetRole||"?"}</div>
+              <div style="color:#6b7280;font-size:12px;margin-top:2px;">${date} · ${r.timeline||""}</div>
+            </div>
+            <span style="background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(99,102,241,0.3);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;">${(r.milestones||[]).length} Milestones</span>
+          </div>
+          ${r.skillGaps?.length?`<div style="display:flex;flex-wrap:wrap;gap:6px;">${r.skillGaps.map(g=>`<span style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);color:#fcd34d;font-size:11px;padding:3px 10px;border-radius:20px;">${g}</span>`).join("")}</div>`:""}
+        </div>`;
+      }).join("");
+    }
+  }catch(e){document.getElementById("roadmaps-loading").textContent="Could not load roadmaps.";}
+});
+
+window.showTab=t=>{
+  ["scores","roadmaps"].forEach(x=>{
+    document.getElementById("tab-"+x+"-content").style.display=x===t?"block":"none";
+    document.getElementById("tab-"+x).classList.toggle("active",x===t);
+  });
+};
+</script>
+</body>
+</html>

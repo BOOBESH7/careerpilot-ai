@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/app.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "frontend/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "backend/app.py" },
+    { "src": "/score", "dest": "backend/app.py" },
+    { "src": "/roadmap", "dest": "backend/app.py" },
+    { "src": "/courses", "dest": "backend/app.py" },
+    { "src": "/chat", "dest": "backend/app.py" },
+    { "src": "/upload-chat", "dest": "backend/app.py" },
+    { "src": "/generate-questions", "dest": "backend/app.py" },
+    { "src": "/interview-questions", "dest": "backend/app.py" },
+    { "src": "/auth-guard.js", "dest": "frontend/auth-guard.js" },
+    { "src": "/login.html", "dest": "frontend/login.html" },
+    { "src": "/profile.html", "dest": "frontend/profile.html" },
+    { "src": "/resume.html", "dest": "frontend/resume.html" },
+    { "src": "/roadmap.html", "dest": "frontend/roadmap.html" },
+    { "src": "/interview.html", "dest": "frontend/interview.html" },
+    { "src": "/courses.html", "dest": "frontend/courses.html" },
+    { "src": "/jobs.html", "dest": "frontend/jobs.html" },
+    { "src": "/chat.html", "dest": "frontend/chat.html" },
+    { "src": "/", "dest": "frontend/index.html" }
+  ]
+}
